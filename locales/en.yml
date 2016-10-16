@@ -1,0 +1,11 @@
+en:
+  vagrant_ovirt4:
+    starting_vm: |-
+      Starting VM.
+    already_up: |-
+      VM is already up.
+    errors:
+      no_vm_error: |-
+        No VM %{vm_name} found.
+      start_vm_error: |-
+        Unable to start VM: %{error_message}
