@@ -10,33 +10,33 @@ module VagrantPlugins
         def initialize(app, env)
           @logger = Log4r::Logger.new("vagrant_ovirt4::action::create_vm")
           @app = app
-          binding.pry
         end
 
         def call(env)
-          binding.pry
           # Get config.
           config = env[:machine].provider_config
-          binding.pry
 
           # Gather some info about domain
-          name = env[:domain_name]
+          #name = env[:domain_name]
+          name = SecureRandom.hex(4)
 
           # Output the settings we're going to use to the user
           env[:ui].info(I18n.t("vagrant_ovirt4.creating_vm"))
           env[:ui].info(" -- Name:          #{name}")
+          env[:ui].info(" -- Cluster:       #{config.cluster}")
 
           # Create oVirt VM.
           attr = {
               :name     => name,
+              :cluster  => {
+                :name => config.cluster,
+              },
+              :template  => {
+                :name => config.template,
+              },
           }
 
-          begin
-            server = env[:ovirt_compute].servers.create(attr)
-          rescue OVIRT::OvirtException => e
-            raise Errors::FogCreateServerError,
-              :error_message => e.message
-          end
+          server = env[:vms_service].add(attr)
 
           # Immediately save the ID since it is created at this point.
           env[:machine].id = server.id
@@ -45,9 +45,13 @@ module VagrantPlugins
           env[:ui].info(I18n.t("vagrant_ovirt4.wait_for_ready_vm"))
           for i in 0..10
             ready = true
-            server = env[:ovirt_compute].servers.get(env[:machine].id.to_s)
-            server.volumes.each do |volume|
-              if volume.status != 'ok'
+            env[:vms_service].list({:search => "id=#{env[:machine].id}"})[0]
+            vm_service = env[:vms_service].vm_service(env[:machine].id)
+            disk_attachments_service = vm_service.disk_attachments_service
+            disk_attachments = disk_attachments_service.list
+            disk_attachments.each do |disk_attachment|
+              disk = env[:connection].follow_link(disk_attachment.disk)
+              if disk.status != 'ok'
                 ready = false
                 break
               end

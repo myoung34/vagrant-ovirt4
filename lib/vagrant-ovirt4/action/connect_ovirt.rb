@@ -16,7 +16,7 @@ module VagrantPlugins
           config = env[:machine].provider_config
 
           conn_attr = {}
-          conn_attr[:url] = "#{config.url}/api"
+          conn_attr[:url] = "#{config.url}"
           conn_attr[:username] = config.username if config.username
           conn_attr[:password] = config.password if config.password
           conn_attr[:debug] = config.debug if config.debug
@@ -25,6 +25,8 @@ module VagrantPlugins
           @logger.info("Connecting to oVirt (#{config.url}) ...")
           OVirtProvider.ovirt_connection = OvirtSDK4::Connection.new(conn_attr)          
           OVirtProvider.vms_service = OVirtProvider.ovirt_connection.system_service.vms_service
+          env[:connection] = OVirtProvider.ovirt_connection
+          env[:vms_service] = OVirtProvider.vms_service
 
           @app.call(env)
         end

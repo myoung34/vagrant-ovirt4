@@ -12,7 +12,7 @@ module VagrantPlugins
         end
 
         def call(env)
-          env[:machine_state_id] = read_state(env[:ovirt_compute], env[:machine])
+          env[:machine_state_id] = read_state(env[:vms_service], env[:machine])
           @app.call(env)
         end
 
@@ -22,7 +22,7 @@ module VagrantPlugins
           return :not_created if machine.id.nil?
 
           # Find the machine
-          server = ovirt.servers.get(machine.id)
+          server = ovirt.list({:search => "id=#{machine.id}"})[0]
           if server.nil?
             machine.id = nil
             return :not_created

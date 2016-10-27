@@ -2,12 +2,14 @@ require 'pathname'
 require 'vagrant-ovirt4/plugin'
 require 'pry'
 require 'pp'
+require 'securerandom'
 
 module VagrantPlugins
   module OVirtProvider
     lib_path = Pathname.new(File.expand_path("../vagrant-ovirt4", __FILE__))
     autoload :Action, lib_path.join("action")
     autoload :Errors, lib_path.join("errors")
+    autoload :Util,   lib_path.join("util")
 
     @@ovirt_connection = nil
     @@vms_service = nil
@@ -20,7 +22,7 @@ module VagrantPlugins
     end
 
     def self.vms_service
-      @@vm_service
+      @@vms_service
     end
 
     def self.vms_service=(conn)

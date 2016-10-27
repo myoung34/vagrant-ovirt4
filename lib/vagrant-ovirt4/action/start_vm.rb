@@ -15,19 +15,14 @@ module VagrantPlugins
         def call(env)
           env[:ui].info(I18n.t("vagrant_ovirt4.starting_vm"))
 
-          machine = env[:ovirt_compute].servers.get(env[:machine].id.to_s)
-          if machine == nil
+          machine = env[:vms_service].vm_service(env[:machine].id)
+          if machine.get.status == nil
             raise Errors::NoVMError,
               :vm_name => env[:machine].id.to_s
           end
 
           # Start VM.
-          begin
-            machine.start
-          rescue OVIRT::OvirtException => e
-            raise Errors::StartVMError,
-              :error_message => e.message
-          end
+          machine.start
 
           @app.call(env)
         end
