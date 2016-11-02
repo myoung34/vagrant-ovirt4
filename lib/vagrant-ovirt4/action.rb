@@ -52,9 +52,9 @@ module VagrantPlugins
 
             b2.use ConnectOVirt
             b2.use ProvisionerCleanup, :before if defined?(ProvisionerCleanup)
-            #b2.use HaltVM
-            #b2.use WaitTillDown
-            #b2.use DestroyVM
+            b2.use HaltVM
+            b2.use WaitTillDown
+            b2.use DestroyVM
           end
         end
       end
@@ -75,9 +75,12 @@ module VagrantPlugins
       autoload :ReadState, action_root.join("read_state")
       autoload :StartVM, action_root.join("start_vm")
       autoload :CreateVM, action_root.join("create_vm")
+      autoload :DestroyVM, action_root.join("destroy_vm")
       autoload :IsCreated, action_root.join("is_created")
       autoload :MessageNotCreated, action_root.join("message_not_created")
       autoload :WaitTillUp, action_root.join("wait_till_up")
+      autoload :WaitTillDown, action_root.join("wait_till_down")
+      autoload :HaltVM, action_root.join("halt_vm")
 
     end
   end
