@@ -16,17 +16,16 @@ module VagrantPlugins
         end
 
         def call(env)
-          config = env[:machine].provider_config
+          vm_service = env[:vms_service].vm_service(env[:machine].id)
 
           env[:ui].info(I18n.t("vagrant_ovirt4.wait_till_down"))
           for i in 1..300
             ready = true
-            server = env[:vms_service].list({:search => "id=#{env[:machine].id}"})[0]
-            if server == nil
+            if vm_service.get == nil
               raise NoVMError, :vm_name => ''
             end
 
-            if env[:machine].state.id != :down
+            if vm_service.get.status.to_sym != :down
               ready = false
             end
             break if ready

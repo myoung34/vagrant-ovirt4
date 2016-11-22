@@ -18,18 +18,25 @@ module VagrantPlugins
 
         # Possible states include (but may not be limited to):
         # :not_created, :up, :down, :saving_state, :suspended
-        def read_state(ovirt, machine)
+        def read_state(vms_service, machine)
           return :not_created if machine.id.nil?
 
           # Find the machine
-          server = ovirt.list({:search => "id=#{machine.id}"})[0]
-          if server.nil?
-            machine.id = nil
-            return :not_created
+          server = vms_service.vm_service(machine.id)
+          begin
+            if server.get.nil?
+              machine.id = nil
+              return :not_created
+            end
+          rescue OvirtSDK4::Error => e
+            if e.message =~ /404/
+              machine.id = nil
+              return :not_created
+            else
+              raise e
+            end
           end
-
-          # Return the state
-          return server.status.to_sym
+          return server.get.status.to_sym
         end
       end
     end

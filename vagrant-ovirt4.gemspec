@@ -16,7 +16,7 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = VagrantPlugins::OVirtProvider::VERSION
 
-  gem.add_runtime_dependency 'ovirt-engine-sdk', '=4.0.2'
+  gem.add_runtime_dependency 'ovirt-engine-sdk', '>=4.0.5'
 
   gem.add_development_dependency 'rake', '~> 0'
 end

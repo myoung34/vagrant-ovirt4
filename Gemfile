@@ -12,4 +12,3 @@ end
 group :plugins do
   gem 'vagrant-ovirt4', :path => '.'
 end
-

@@ -13,7 +13,6 @@ module VagrantPlugins
           # Destroy the server, remove the tracking ID
           env[:ui].info(I18n.t("vagrant_ovirt4.destroy_vm"))
 
-          machine = env[:vms_service].vm_service(env[:machine].id)
           vm_service = env[:vms_service].vm_service(env[:machine].id)
           vm_service.remove
           env[:machine].id = nil

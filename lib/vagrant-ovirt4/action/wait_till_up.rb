@@ -32,12 +32,12 @@ module VagrantPlugins
               next if env[:interrupted]
 
               # Get VM.
-              server = env[:vms_service].list({:search => "id=#{env[:machine].id}"})[0]
+              server = env[:vms_service].vm_service(env[:machine].id)
               if server == nil
                 raise NoVMError, :vm_name => ''
               end
 
-              nics_service = env[:vms_service].vm_service(env[:machine].id).nics_service
+              nics_service = server.nics_service
               nics = nics_service.list
               env[:ip_address] = nics.collect { |nic_attachment| env[:connection].follow_link(nic_attachment).reported_devices.collect { |dev| dev.ips.collect { |ip| ip.address if ip.version == 'v4' } } }.flatten.reject { |ip| ip.nil? }.first rescue nil
               @logger.debug("Got output #{env[:ip_address]}")

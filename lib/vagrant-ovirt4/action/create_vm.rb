@@ -43,9 +43,8 @@ module VagrantPlugins
 
           # Wait till all volumes are ready.
           env[:ui].info(I18n.t("vagrant_ovirt4.wait_for_ready_vm"))
-          for i in 0..10
+          for i in 0..300
             ready = true
-            env[:vms_service].list({:search => "id=#{env[:machine].id}"})[0]
             vm_service = env[:vms_service].vm_service(env[:machine].id)
             disk_attachments_service = vm_service.disk_attachments_service
             disk_attachments = disk_attachments_service.list

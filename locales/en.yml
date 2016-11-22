@@ -1,7 +1,11 @@
 en:
   vagrant_ovirt4:
+    creating_vm: |-
+      Creating VM with the following settings...
     starting_vm: |-
       Starting VM.
+    not_created: |-
+      VM is not created. Please run `vagrant up` first.
     already_up: |-
       VM is already up.
     wait_for_ready_vm: |-
@@ -10,8 +14,6 @@ en:
       An error occured. Recovering..
     waiting_for_ip: |-
       Waiting for VM to get an IP address...
-    wait_for_ready_vm: |-
-      Waiting for VM to become "ready" to start...
     ready: |-
       Machine is booted and ready for use!
     halt_vm: |-
@@ -25,3 +27,5 @@ en:
         No VM %{vm_name} found.
       start_vm_error: |-
         Unable to start VM: %{error_message}
+      wait_for_ready_vm_timeout: |-
+        Timeout occurred while waiting for VM to become ready to start

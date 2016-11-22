@@ -3,3 +3,5 @@
 *.log
 /Vagrantfile
 .vagrant
+example_box/*.box
+*.gem

@@ -25,7 +25,7 @@ PATH
   remote: .
   specs:
     vagrant-ovirt4 (0.0.1)
-      ovirt-engine-sdk (= 4.0.2)
+      ovirt-engine-sdk (>= 4.0.5)
 
 GEM
   remote: https://rubygems.org/
@@ -35,7 +35,6 @@ GEM
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
     coderay (1.1.1)
-    curb (0.9.3)
     domain_name (0.5.20160826)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
@@ -73,8 +72,7 @@ GEM
     nokogiri (1.6.7.1)
       mini_portile2 (~> 2.0.0.rc2)
     nori (2.6.0)
-    ovirt-engine-sdk (4.0.2)
-      curb (~> 0.8)
+    ovirt-engine-sdk (4.0.6)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
