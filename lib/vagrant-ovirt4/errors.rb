@@ -19,6 +19,10 @@ module VagrantPlugins
         error_key(:wait_for_ready_vm_timeout)
       end
 
+      class AddInterfaceError < VagrantOVirtError
+        error_key(:add_interface_error)
+      end
+
     end
   end
 end
