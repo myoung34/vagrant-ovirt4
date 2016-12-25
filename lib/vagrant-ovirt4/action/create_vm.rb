@@ -24,6 +24,8 @@ module VagrantPlugins
           env[:ui].info(I18n.t("vagrant_ovirt4.creating_vm"))
           env[:ui].info(" -- Name:          #{name}")
           env[:ui].info(" -- Cluster:       #{config.cluster}")
+          env[:ui].info(" -- Template:      #{config.template}")
+          env[:ui].info(" -- Console Type:  #{config.console}")
 
           # Create oVirt VM.
           attr = {
@@ -34,8 +36,12 @@ module VagrantPlugins
               :template  => {
                 :name => config.template,
               },
+              :display  => {
+                :type => config.console,
+              },
           }
 
+          #TODO: create NIC here, not in create_network_interface.rb
           server = env[:vms_service].add(attr)
 
           # Immediately save the ID since it is created at this point.

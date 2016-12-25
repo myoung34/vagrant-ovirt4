@@ -29,7 +29,7 @@ module VagrantPlugins
               #b2.use ResizeDisk
 
               #b2.use Provision
-              #b2.use CreateNetworkInterfaces
+              b2.use CreateNetworkInterfaces
 
               #b2.use SetHostname
             end
@@ -72,6 +72,7 @@ module VagrantPlugins
 
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
       autoload :ConnectOVirt, action_root.join("connect_ovirt")
+      autoload :CreateNetworkInterfaces, action_root.join("create_network_interfaces")
       autoload :ReadState, action_root.join("read_state")
       autoload :StartVM, action_root.join("start_vm")
       autoload :CreateVM, action_root.join("create_vm")

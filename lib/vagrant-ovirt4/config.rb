@@ -14,6 +14,7 @@ module VagrantPlugins
       attr_accessor :template
       attr_accessor :memory
       attr_accessor :cluster
+      attr_accessor :console
 
       def initialize
         @url            = UNSET_VALUE
@@ -26,6 +27,7 @@ module VagrantPlugins
         @template       = UNSET_VALUE
         @memory         = UNSET_VALUE
         @cluster        = UNSET_VALUE
+        @console        = UNSET_VALUE
 
       end
 
@@ -37,6 +39,7 @@ module VagrantPlugins
         @debug = false if @debug == UNSET_VALUE
         @cpus = 1 if @cpus == UNSET_VALUE
         @cluster = nil if @cluster == UNSET_VALUE
+        @console = nil if @console == UNSET_VALUE
 
       end
 

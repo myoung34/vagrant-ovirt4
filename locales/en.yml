@@ -29,3 +29,5 @@ en:
         Unable to start VM: %{error_message}
       wait_for_ready_vm_timeout: |-
         Timeout occurred while waiting for VM to become ready to start
+      add_interface_error: |-
+        Error while adding new interface to VM. %{error_message}

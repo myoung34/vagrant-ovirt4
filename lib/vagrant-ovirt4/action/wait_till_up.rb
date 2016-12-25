@@ -24,7 +24,6 @@ module VagrantPlugins
           config = env[:machine].provider_config
 
           # Wait for VM to obtain an ip address.
-          env[:ip_address] = nil
           env[:metrics]["instance_ip_time"] = Util::Timer.time do
             env[:ui].info(I18n.t("vagrant_ovirt4.waiting_for_ip"))
             for i in 1..300
@@ -39,10 +38,13 @@ module VagrantPlugins
 
               nics_service = server.nics_service
               nics = nics_service.list
-              env[:ip_address] = nics.collect { |nic_attachment| env[:connection].follow_link(nic_attachment).reported_devices.collect { |dev| dev.ips.collect { |ip| ip.address if ip.version == 'v4' } } }.flatten.reject { |ip| ip.nil? }.first rescue nil
-              @logger.debug("Got output #{env[:ip_address]}")
-              break if env[:ip_address] =~ /[0-9\.]+/
-              sleep 2
+              ip_addr = nics.collect { |nic_attachment| env[:connection].follow_link(nic_attachment).reported_devices.collect { |dev| dev.ips.collect { |ip| ip.address if ip.version == 'v4' } } }.flatten.reject { |ip| ip.nil? }.first rescue nil
+              unless ip_addr.nil?
+                env[:ip_address] = ip_addr
+                break
+                @logger.debug("Got output #{env[:ip_address]}")
+              end
+              sleep 5
             end
           end
           terminate(env) if env[:interrupted]
