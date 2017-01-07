@@ -23,6 +23,9 @@ module VagrantPlugins
         error_key(:add_interface_error)
       end
 
+      class NoNetworkError < VagrantOVirtError
+        error_key(:no_network_error)
+      end
     end
   end
 end

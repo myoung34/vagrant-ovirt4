@@ -4,4 +4,5 @@
 /Vagrantfile
 .vagrant
 example_box/*.box
+/.idea
 *.gem
