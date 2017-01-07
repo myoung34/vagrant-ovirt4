@@ -22,11 +22,15 @@ en:
       Waiting for VM to shutdown...
     destroy_vm: |-
       Removing VM...
+    already_up: |-
+      VM is already up.
     errors:
       no_vm_error: |-
         No VM %{vm_name} found.
       start_vm_error: |-
         Unable to start VM: %{error_message}
+      no_network_error: |-
+        No network %{network_name} found.
       wait_for_ready_vm_timeout: |-
         Timeout occurred while waiting for VM to become ready to start
       add_interface_error: |-

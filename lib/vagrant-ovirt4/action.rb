@@ -13,7 +13,7 @@ module VagrantPlugins
           b.use ConnectOVirt
           b.use Call, ReadState do |env, b2|
             if env[:machine_state_id] == :up
-              b2.use SyncFolders
+              #b2.use SyncFolders
               b2.use MessageAlreadyUp
               next
             end
@@ -70,6 +70,36 @@ module VagrantPlugins
         end
       end
 
+      # This action is called to read the SSH info of the machine. The
+      # resulting state is expected to be put into the `:machine_ssh_info`
+      # key.
+      def self.action_read_ssh_info
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use ConfigValidate
+          b.use ConnectOVirt
+          b.use ReadSSHInfo
+        end
+      end
+
+      def self.action_ssh
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use ConfigValidate
+          b.use ConnectOVirt
+          b.use Call, ReadState do |env, b2|
+            if env[:machine_state_id] == :not_created
+              b2.use MessageNotCreated
+              next
+            end
+            if env[:machine_state_id] != :up
+              b2.use MessageNotUp
+              next
+            end
+            b2.use SSHExec
+          end
+        end
+      end
+
+
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
       autoload :ConnectOVirt, action_root.join("connect_ovirt")
       autoload :CreateNetworkInterfaces, action_root.join("create_network_interfaces")
@@ -79,9 +109,11 @@ module VagrantPlugins
       autoload :DestroyVM, action_root.join("destroy_vm")
       autoload :IsCreated, action_root.join("is_created")
       autoload :MessageNotCreated, action_root.join("message_not_created")
+      autoload :MessageAlreadyUp, action_root.join("message_already_up")
       autoload :WaitTillUp, action_root.join("wait_till_up")
       autoload :WaitTillDown, action_root.join("wait_till_down")
       autoload :HaltVM, action_root.join("halt_vm")
+      autoload :ReadSSHInfo, action_root.join("read_ssh_info")
 
     end
   end
