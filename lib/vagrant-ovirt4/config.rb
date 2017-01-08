@@ -10,7 +10,6 @@ module VagrantPlugins
       attr_accessor :insecure
       attr_accessor :debug
       attr_accessor :cpus
-      attr_accessor :datacenter
       attr_accessor :template
       attr_accessor :memory
       attr_accessor :cluster
@@ -23,7 +22,6 @@ module VagrantPlugins
         @insecure       = UNSET_VALUE
         @debug          = UNSET_VALUE
         @cpus           = UNSET_VALUE
-        @datacenter     = UNSET_VALUE
         @template       = UNSET_VALUE
         @memory         = UNSET_VALUE
         @cluster        = UNSET_VALUE
@@ -40,6 +38,8 @@ module VagrantPlugins
         @cpus = 1 if @cpus == UNSET_VALUE
         @cluster = nil if @cluster == UNSET_VALUE
         @console = nil if @console == UNSET_VALUE
+        @memory = 256 if @memory == UNSET_VALUE
+        @template = nil if @template == UNSET_VALUE
 
       end
 
