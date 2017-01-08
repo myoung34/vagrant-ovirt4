@@ -22,7 +22,7 @@ module VagrantPlugins
             type, options = config
             # We support private and public networks only. They mean both the
             # same right now.
-            next unless [:private_network, :public_network].include? type
+            next unless [:private_network].include? type
 
             iface_options = scoped_hash_override(options, :ovirt)
           end
