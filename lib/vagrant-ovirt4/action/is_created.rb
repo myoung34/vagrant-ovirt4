@@ -1,3 +1,5 @@
+require "log4r"
+
 module VagrantPlugins
   module OVirtProvider
     module Action
@@ -6,6 +8,7 @@ module VagrantPlugins
       class IsCreated
         def initialize(app, env)
           @app = app
+          @logger = Log4r::Logger.new("vagrant_ovirt4::action::is_created")
         end
 
         def call(env)

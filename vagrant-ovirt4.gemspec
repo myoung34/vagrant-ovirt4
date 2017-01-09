@@ -19,5 +19,9 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'ovirt-engine-sdk', '>=4.0.5'
 
   gem.add_development_dependency 'rake', '~> 0'
+
+  # rspec 3.4 to mock File
+  gem.add_development_dependency "rspec", "~> 3.4"
+  gem.add_development_dependency "rspec-its"
 end
 

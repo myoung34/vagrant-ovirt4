@@ -28,13 +28,9 @@ module VagrantPlugins
               machine.id = nil
               return :not_created
             end
-          rescue OvirtSDK4::Error => e
-            if e.message =~ /404/
-              machine.id = nil
-              return :not_created
-            else
-              raise e
-            end
+          rescue 
+            machine.id = nil
+            return :not_created
           end
           return server.get.status.to_sym
         end
