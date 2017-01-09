@@ -8,6 +8,8 @@ en:
       VM is not created. Please run `vagrant up` first.
     already_up: |-
       VM is already up.
+    not_up: |-
+      VM is not running. Please run `vagrant up` first.
     wait_for_ready_vm: |-
       Waiting for VM to become "ready" to start...
     error_recovering: |-

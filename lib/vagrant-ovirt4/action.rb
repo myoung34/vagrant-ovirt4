@@ -110,6 +110,7 @@ module VagrantPlugins
       autoload :IsCreated, action_root.join("is_created")
       autoload :MessageNotCreated, action_root.join("message_not_created")
       autoload :MessageAlreadyUp, action_root.join("message_already_up")
+      autoload :MessageNotUp, action_root.join("message_not_up")
       autoload :WaitTillUp, action_root.join("wait_till_up")
       autoload :WaitTillDown, action_root.join("wait_till_down")
       autoload :HaltVM, action_root.join("halt_vm")
