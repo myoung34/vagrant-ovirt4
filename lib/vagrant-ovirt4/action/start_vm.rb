@@ -26,7 +26,7 @@ module VagrantPlugins
           iface_options = nil
           env[:machine].config.vm.networks.each do |config|
             type, options = config
-            next unless [:private_network, :public_network].include? type
+            next unless [:private_network].include? type
 
             iface_options = scoped_hash_override(options, :ovirt)
           end
