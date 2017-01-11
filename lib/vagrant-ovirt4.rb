@@ -1,8 +1,5 @@
 require 'pathname'
 require 'vagrant-ovirt4/plugin'
-require 'pry'
-require 'pp'
-require 'securerandom'
 
 module VagrantPlugins
   module OVirtProvider
