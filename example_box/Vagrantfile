@@ -1,7 +1,5 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-Vagrant.require_plugin "vagrant-ovirt4"
-
 Vagrant.configure("2") do |config|
   config.vm.box = 'ovirt4'
   #config.vm.box_url = 'https://github.com/myoung34/vagrant-ovirt4/blob/master/example_box/dummy.box?raw=true'

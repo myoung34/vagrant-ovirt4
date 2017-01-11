@@ -46,8 +46,6 @@ $ vagrant up --provider=ovirt4
 ### Configuration example
 
 ```
-Vagrant.require_plugin "vagrant-ovirt4"
-
 Vagrant.configure("2") do |config|
   config.vm.box = 'ovirt4'
   config.vm.hostname = "foo" 
