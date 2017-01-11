@@ -9,6 +9,10 @@ group :development do
   gem 'pry-byebug'
 end
 
+group :testing do
+  gem 'rspec-its'
+end
+
 group :plugins do
   gem 'vagrant-ovirt4', :path => '.'
 end
