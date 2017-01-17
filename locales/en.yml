@@ -29,6 +29,8 @@ en:
     errors:
       no_vm_error: |-
         No VM %{vm_name} found.
+      create_vm_error: |-
+        %{error_message}
       start_vm_error: |-
         Unable to start VM: %{error_message}
       no_network_error: |-

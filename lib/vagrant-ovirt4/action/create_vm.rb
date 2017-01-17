@@ -40,7 +40,12 @@ module VagrantPlugins
               },
           }
 
-          server = env[:vms_service].add(attr)
+          begin
+            server = env[:vms_service].add(attr) 
+          rescue OvirtSDK4::Error => e
+            raise Errors::CreateVMError,
+              :error_message => /Fault detail is \"\[(.*)\]\".*/.match(e.message)[1]
+          end
 
           # Immediately save the ID since it is created at this point.
           env[:machine].id = server.id
