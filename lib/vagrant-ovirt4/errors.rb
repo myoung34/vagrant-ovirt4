@@ -11,6 +11,10 @@ module VagrantPlugins
         error_key(:no_vm_error)
       end
 
+      class CreateVMError < VagrantOVirtError
+        error_key(:create_vm_error)
+      end
+
       class StartVMError < VagrantOVirtError
         error_key(:start_vm_error)
       end
