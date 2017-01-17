@@ -25,6 +25,9 @@ if [ $? -ne 0 ]; then
 fi
 echo "* Found RedHat ${RHEL_MAJOR_VERSION} version."
 
+ATOMIC=false
+which yum >/dev/null 2>&1
+[[ $? -eq 0 ]] && ATOMIC=true
 
 # Setup hostname vagrant-something.
 FQDN="$1.vagrantup.com"
@@ -36,26 +39,31 @@ fi
 
 
 # Enable EPEL and Puppet repositories.
-if [[ $RHEL_MAJOR_VERSION -eq 5 ]]; then
-  yum install -y \
-    http://ftp.astral.ro/mirrors/fedora/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm \
-    https://yum.puppetlabs.com/puppetlabs-release-el-5.noarch.rpm
-elif [[ $RHEL_MAJOR_VERSION -eq 6 ]]; then
-  yum install -y \
-    http://ftp.astral.ro/mirrors/fedora/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm \
-    https://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm
-elif [[ $RHEL_MAJOR_VERSION -eq 7 ]]; then
-  yum install -y \
-    http://ftp.astral.ro/mirrors/fedora/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm \
-    https://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
-else
-  echo "Is this a valid major release?"
-  exit 1
+if [[ $ATOMIC != "true" ]]; then
+  if [[ $RHEL_MAJOR_VERSION -eq 5 ]]; then
+    yum install -y \
+      http://ftp.astral.ro/mirrors/fedora/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm \
+      https://yum.puppetlabs.com/puppetlabs-release-el-5.noarch.rpm
+  elif [[ $RHEL_MAJOR_VERSION -eq 6 ]]; then
+    yum install -y \
+      http://ftp.astral.ro/mirrors/fedora/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm \
+      https://yum.puppetlabs.com/puppetlabs-release-el-6.noarch.rpm
+  elif [[ $RHEL_MAJOR_VERSION -eq 7 ]]; then
+    yum install -y \
+      http://ftp.astral.ro/mirrors/fedora/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm \
+      https://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
+  else
+    echo "Is this a valid major release?"
+    exit 1
+  fi
 fi
 
 # Install some required software.
-yum -y install openssh-server openssh-clients sudo curl \
-ruby ruby-devel make gcc rubygems rsync puppet ovirt-guest-agent cloud-init
+if [[ $ATOMIC != "true" ]]; then
+  yum -y install openssh-server openssh-clients sudo curl \
+  ruby ruby-devel make gcc rubygems rsync puppet ovirt-guest-agent cloud-init
+fi
+
 chkconfig sshd on
 
 # Users, groups, passwords and sudoers.
@@ -100,5 +108,6 @@ rm -fr /var/lib/dhclient/*
 echo $'' > /etc/sysconfig/network-scripts/ifcfg-eth0
 
 # Do some cleanup..
-rm -f ~root/.bash_history
-yum clean all
+rm -f /root/.bash_history
+rm -f /root/authorized_keys
+[[ $ATOMIC != "true" ]] && yum clean all
