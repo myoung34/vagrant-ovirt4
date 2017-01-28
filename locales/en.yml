@@ -10,6 +10,8 @@ en:
       VM is already up.
     not_up: |-
       VM is not running. Please run `vagrant up` first.
+    powering_up: |-
+      VM is currently powering up. Please run `vagrant halt` to abort or wait until its status is 'up'.
     wait_for_ready_vm: |-
       Waiting for VM to become "ready" to start...
     error_recovering: |-
