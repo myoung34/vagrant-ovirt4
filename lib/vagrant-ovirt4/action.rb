@@ -99,22 +99,51 @@ module VagrantPlugins
         end
       end
 
+      def self.action_halt
+        with_ovirt do |env, b|
+          if env[:machine_state_id] == :powering_up
+            b.use MessagePoweringUp
+            next
+          elsif env[:machine_state_id] != :up
+            b.use MessageNotUp
+            next
+          end
+          b.use HaltVM
+        end
+      end
 
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
       autoload :ConnectOVirt, action_root.join("connect_ovirt")
       autoload :CreateNetworkInterfaces, action_root.join("create_network_interfaces")
-      autoload :ReadState, action_root.join("read_state")
-      autoload :StartVM, action_root.join("start_vm")
       autoload :CreateVM, action_root.join("create_vm")
       autoload :DestroyVM, action_root.join("destroy_vm")
+      autoload :HaltVM, action_root.join("halt_vm")
       autoload :IsCreated, action_root.join("is_created")
+      autoload :ReadSSHInfo, action_root.join("read_ssh_info")
+      autoload :ReadState, action_root.join("read_state")
+      autoload :StartVM, action_root.join("start_vm")
+      autoload :WaitTillDown, action_root.join("wait_till_down")
+      autoload :WaitTillUp, action_root.join("wait_till_up")
+
       autoload :MessageNotCreated, action_root.join("message_not_created")
       autoload :MessageAlreadyUp, action_root.join("message_already_up")
       autoload :MessageNotUp, action_root.join("message_not_up")
-      autoload :WaitTillUp, action_root.join("wait_till_up")
-      autoload :WaitTillDown, action_root.join("wait_till_down")
-      autoload :HaltVM, action_root.join("halt_vm")
-      autoload :ReadSSHInfo, action_root.join("read_ssh_info")
+      autoload :MessagePoweringUp, action_root.join("message_powering_up")
+
+      private
+      def self.with_ovirt
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use ConfigValidate
+          b.use ConnectOVirt
+          b.use Call, ReadState do |env, b2|
+            if !env[:machine_state_id] == :not_created
+              b2.use MessageNotCreated
+              next
+            end
+            yield env, b2
+          end
+        end
+      end
 
     end
   end
