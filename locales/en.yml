@@ -28,6 +28,15 @@ en:
       Removing VM...
     already_up: |-
       VM is already up.
+    states:
+      long_up: |-
+        The instance is running. Use `vagrant halt` to stop it.
+      short_up: |-
+        up
+      long_down: |-
+        The instance is not running. Use `vagrant up` to start it.
+      short_down: |-
+        down
     errors:
       no_vm_error: |-
         No VM %{vm_name} found.
