@@ -101,14 +101,25 @@ module VagrantPlugins
 
       def self.action_halt
         with_ovirt do |env, b|
-          if env[:machine_state_id] == :powering_up
-            b.use MessagePoweringUp
-            next
-          elsif env[:machine_state_id] != :up
-            b.use MessageNotUp
-            next
+          b.use Call, IsRunning do |env2, b2|
+            if env[:machine_state_id] == :powering_up
+              b2.use MessagePoweringUp
+              next
+            end
+            if !env2[:result]
+              b2.use MessageNotUp
+              next
+            end
+            b2.use HaltVM
+            b2.use WaitTillDown
           end
-          b.use HaltVM
+        end
+      end
+
+      def self.action_reload
+        with_ovirt do |env, b|
+          b.use action_halt
+          b.use action_up
         end
       end
 
@@ -119,6 +130,7 @@ module VagrantPlugins
       autoload :DestroyVM, action_root.join("destroy_vm")
       autoload :HaltVM, action_root.join("halt_vm")
       autoload :IsCreated, action_root.join("is_created")
+      autoload :IsRunning, action_root.join("is_running")
       autoload :ReadSSHInfo, action_root.join("read_ssh_info")
       autoload :ReadState, action_root.join("read_state")
       autoload :StartVM, action_root.join("start_vm")
@@ -144,8 +156,6 @@ module VagrantPlugins
           end
         end
       end
-
     end
   end
 end
-
