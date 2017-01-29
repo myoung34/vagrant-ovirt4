@@ -32,6 +32,10 @@ en:
       VM is already up.
     suspend_vm: |-
       Suspending VM...
+    not_suspended: |-
+      VM is not in a suspended state.
+    saving_state: |-
+      VM is busy saving state. Please wait and try again.
     states:
       long_up: |-
         The instance is running. Use `vagrant halt` to stop it.

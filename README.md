@@ -44,6 +44,8 @@ $ vagrant up --provider=ovirt4
 1. `vagrant halt`
 1. `vagrant reload`
 1. `vagrant status`
+1. `vagrant suspend`
+1. `vagrant resume`
 
 ### Configuration example
 
