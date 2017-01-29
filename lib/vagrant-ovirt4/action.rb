@@ -123,6 +123,23 @@ module VagrantPlugins
         end
       end
 
+      def self.action_suspend
+        with_ovirt do |env, b|
+          b.use Call, IsRunning do |env2, b2|
+            if env[:machine_state_id] == :powering_up
+              b2.use MessagePoweringUp
+              next
+            end
+            if !env2[:result]
+              b2.use MessageNotUp
+              next
+            end
+            b2.use SuspendVM
+            b2.use WaitTilSuspended
+          end
+        end
+      end
+
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
       autoload :ConnectOVirt, action_root.join("connect_ovirt")
       autoload :CreateNetworkInterfaces, action_root.join("create_network_interfaces")
@@ -134,8 +151,10 @@ module VagrantPlugins
       autoload :ReadSSHInfo, action_root.join("read_ssh_info")
       autoload :ReadState, action_root.join("read_state")
       autoload :StartVM, action_root.join("start_vm")
+      autoload :SuspendVM, action_root.join("suspend_vm")
       autoload :WaitTillDown, action_root.join("wait_till_down")
       autoload :WaitTillUp, action_root.join("wait_till_up")
+      autoload :WaitTilSuspended, action_root.join("wait_til_suspended")
 
       autoload :MessageNotCreated, action_root.join("message_not_created")
       autoload :MessageAlreadyUp, action_root.join("message_already_up")
