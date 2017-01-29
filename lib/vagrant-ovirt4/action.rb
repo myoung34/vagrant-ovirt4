@@ -140,6 +140,22 @@ module VagrantPlugins
         end
       end
 
+      def self.action_resume
+        with_ovirt do |env, b|
+          if env[:machine_state_id] == :saving_state
+            b.use MessageSavingState
+            next
+          end
+          if env[:machine_state_id] != :suspended
+            b.use MessageNotSuspended
+            next
+          end
+          b.use action_up
+        end
+      end
+
+
+
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
       autoload :ConnectOVirt, action_root.join("connect_ovirt")
       autoload :CreateNetworkInterfaces, action_root.join("create_network_interfaces")
@@ -156,10 +172,12 @@ module VagrantPlugins
       autoload :WaitTillUp, action_root.join("wait_till_up")
       autoload :WaitTilSuspended, action_root.join("wait_til_suspended")
 
-      autoload :MessageNotCreated, action_root.join("message_not_created")
       autoload :MessageAlreadyUp, action_root.join("message_already_up")
+      autoload :MessageNotCreated, action_root.join("message_not_created")
+      autoload :MessageNotSuspended, action_root.join("message_not_suspended")
       autoload :MessageNotUp, action_root.join("message_not_up")
       autoload :MessagePoweringUp, action_root.join("message_powering_up")
+      autoload :MessageSavingState, action_root.join("message_saving_state")
 
       private
       def self.with_ovirt
