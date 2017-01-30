@@ -101,6 +101,27 @@ module VagrantPlugins
         end
       end
 
+      def self.action_ssh_run
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use ConfigValidate
+          b.use ConnectOVirt
+          b.use Call, ReadState do |env, b2|
+            if env[:machine_state_id] == :not_created
+              b2.use MessageNotCreated
+              next
+            end
+            if env[:machine_state_id] != :up
+              b2.use MessageNotUp
+              next
+            end
+
+            raise Errors::NoIPError if env[:ip_address].nil?
+            b2.use SSHRun
+          end
+        end
+      end
+
+
       def self.action_halt
         with_ovirt do |env, b|
           b.use Call, IsRunning do |env2, b2|
