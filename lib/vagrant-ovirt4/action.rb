@@ -177,7 +177,23 @@ module VagrantPlugins
         end
       end
 
+      def self.action_snapshot_list
+        with_ovirt do |env, b|
+          b.use SnapshotList
+        end
+      end
 
+      def self.action_snapshot_save
+        with_ovirt do |env, b|
+          b.use SnapshotSave
+        end
+      end
+
+      def self.action_snapshot_delete
+        with_ovirt do |env, b|
+          b.use SnapshotDelete
+        end
+      end
 
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
       autoload :ConnectOVirt, action_root.join("connect_ovirt")
@@ -189,6 +205,9 @@ module VagrantPlugins
       autoload :IsRunning, action_root.join("is_running")
       autoload :ReadSSHInfo, action_root.join("read_ssh_info")
       autoload :ReadState, action_root.join("read_state")
+      autoload :SnapshotDelete, action_root.join("snapshot_delete")
+      autoload :SnapshotList, action_root.join("snapshot_list")
+      autoload :SnapshotSave, action_root.join("snapshot_save")
       autoload :StartVM, action_root.join("start_vm")
       autoload :SuspendVM, action_root.join("suspend_vm")
       autoload :WaitTillDown, action_root.join("wait_till_down")

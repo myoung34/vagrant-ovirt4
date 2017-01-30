@@ -34,6 +34,14 @@ module VagrantPlugins
       class NoIPError < VagrantOVirtError
         error_key(:no_ip_error)
       end
+
+      class RemoveActiveSnapshotError < VagrantOVirtError
+        error_key(:remove_active_snapshot_error)
+      end
+
+      class RemoveSnapshotError < VagrantOVirtError
+        error_key(:remove_snapshot_error)
+      end
     end
   end
 end

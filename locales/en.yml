@@ -36,6 +36,12 @@ en:
       VM is not in a suspended state.
     saving_state: |-
       VM is busy saving state. Please wait and try again.
+    snapshot_list: |-
+      Retrieving list of snapshots...
+    snapshot_save: |-
+      Creating snapshot...
+    snapshot_delete: |-
+      Deleting snapshot...
     states:
       long_up: |-
         The instance is running. Use `vagrant halt` to stop it.
@@ -60,3 +66,7 @@ en:
         Error while adding new interface to VM. %{error_message}
       no_ip_error: |-
         The VM has not reported an IP address. Please ensure the ovirt-guest-agent is running and the machine is up.
+      remove_active_snapshot_error: |-
+        Snapshot with id %{id} is the active snapshot which cannot be removed.
+      remove_snapshot_error: |-
+        Snapshot with id %{id} Could not be removed. Details: %{error_message}.
