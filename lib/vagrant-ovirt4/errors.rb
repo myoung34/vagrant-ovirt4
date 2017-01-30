@@ -30,6 +30,10 @@ module VagrantPlugins
       class NoNetworkError < VagrantOVirtError
         error_key(:no_network_error)
       end
+
+      class NoIPError < VagrantOVirtError
+        error_key(:no_ip_error)
+      end
     end
   end
 end

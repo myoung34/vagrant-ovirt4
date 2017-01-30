@@ -41,6 +41,7 @@ $ vagrant up --provider=ovirt4
 1. `vagrant up`
 1. `vagrant destroy`
 1. `vagrant ssh`
+1. `vagrant ssh-config`
 1. `vagrant halt`
 1. `vagrant reload`
 1. `vagrant status`

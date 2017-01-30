@@ -94,6 +94,8 @@ module VagrantPlugins
               b2.use MessageNotUp
               next
             end
+
+            raise Errors::NoIPError if env[:ip_address].nil?
             b2.use SSHExec
           end
         end

@@ -12,16 +12,15 @@ module VagrantPlugins
         end
 
         def call(env)
-          env[:machine_state_id] = read_state(env[:vms_service], env[:machine])
+          env[:machine_state_id] = read_state(env)
           @app.call(env)
         end
 
-        # Possible states include (but may not be limited to):
-        # :not_created, :up, :down, :saving_state, :suspended
-        def read_state(vms_service, machine)
+        def read_state(env)
+          vms_service = env[:vms_service]
+          machine = env[:machine]
           return :not_created if machine.id.nil?
 
-          # Find the machine
           server = vms_service.vm_service(machine.id)
           begin
             if server.get.nil?
@@ -32,6 +31,14 @@ module VagrantPlugins
             machine.id = nil
             return :not_created
           end
+          nics_service = server.nics_service
+          nics = nics_service.list
+          ip_addr = nics.collect { |nic_attachment| env[:connection].follow_link(nic_attachment).reported_devices.collect { |dev| dev.ips.collect { |ip| ip.address if ip.version == 'v4' } } }.flatten.reject { |ip| ip.nil? }.first rescue nil
+          unless ip_addr.nil?
+            env[:ip_address] = ip_addr
+            @logger.debug("Got output #{env[:ip_address]}")
+          end
+
           return server.get.status.to_sym
         end
       end

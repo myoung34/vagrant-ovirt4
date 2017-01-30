@@ -58,3 +58,5 @@ en:
         Timeout occurred while waiting for VM to become ready to start
       add_interface_error: |-
         Error while adding new interface to VM. %{error_message}
+      no_ip_error: |-
+        The VM has not reported an IP address. Please ensure the ovirt-guest-agent is running and the machine is up.
