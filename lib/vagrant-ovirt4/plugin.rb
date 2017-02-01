@@ -20,6 +20,11 @@ module VagrantPlugins
       Vagrant plugin to manage oVirt v4 machines.
       DESC
 
+      provider_capability('ovirt4', 'snapshot_list') do
+        require_relative 'cap/snapshot_list'
+        Cap::SnapshotList
+      end
+
       config("ovirt4", :provider) do
         require_relative "config"
         Config
