@@ -52,7 +52,9 @@ describe VagrantPlugins::OVirtProvider::Action::ReadState do
       allow(env.machine).to receive(:id).and_return('wat')
       allow(env.vms_service).to receive(:vm_service).and_return({})
       allow(env.vms_service.vm_service).to receive(:get).and_return({})
+      allow(env.vms_service.vm_service).to receive(:nics_service).and_return([])
       allow(env.vms_service.vm_service.get).to receive(:status).and_return('active')
+      allow(env.vms_service.vm_service.nics_service).to receive(:list).and_return([])
     end
   
     it 'continues the middleware chain' do
