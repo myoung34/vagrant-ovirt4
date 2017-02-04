@@ -13,7 +13,7 @@ module VagrantPlugins
           b.use ConnectOVirt
           b.use Call, ReadState do |env, b2|
             if env[:machine_state_id] == :up
-              #b2.use SyncFolders
+              b2.use SyncFolders
               b2.use MessageAlreadyUp
               next
             end
@@ -36,7 +36,7 @@ module VagrantPlugins
 
             b2.use StartVM
             b2.use WaitTillUp
-            #b2.use SyncFolders
+            b2.use SyncFolders
           end
         end
       end
@@ -210,6 +210,7 @@ module VagrantPlugins
       autoload :SnapshotSave, action_root.join("snapshot_save")
       autoload :StartVM, action_root.join("start_vm")
       autoload :SuspendVM, action_root.join("suspend_vm")
+      autoload :SyncFolders, action_root.join("sync_folders")
       autoload :WaitTillDown, action_root.join("wait_till_down")
       autoload :WaitTillUp, action_root.join("wait_till_up")
       autoload :WaitTilSuspended, action_root.join("wait_til_suspended")

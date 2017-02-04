@@ -18,6 +18,8 @@ en:
       An error occured. Recovering..
     waiting_for_ip: |-
       Waiting for VM to get an IP address...
+    rsync_folder: |-
+      Rsyncing folder: %{hostpath} => %{guestpath}
     ready: |-
       Machine is booted and ready for use!
     halt_vm: |-
