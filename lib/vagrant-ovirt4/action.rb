@@ -24,14 +24,14 @@ module VagrantPlugins
             end
 
             if env[:machine_state_id] == :not_created
-              #b2.use SetNameOfDomain
+              b2.use SetNameOfDomain
               b2.use CreateVM
               #b2.use ResizeDisk
 
               b2.use Provision
               b2.use CreateNetworkInterfaces
 
-              #b2.use SetHostname
+              b2.use SetHostname
             end
 
             b2.use StartVM
@@ -218,6 +218,7 @@ module VagrantPlugins
       autoload :IsRunning, action_root.join("is_running")
       autoload :ReadSSHInfo, action_root.join("read_ssh_info")
       autoload :ReadState, action_root.join("read_state")
+      autoload :SetNameOfDomain, action_root.join("set_name_of_domain")
       autoload :SnapshotDelete, action_root.join("snapshot_delete")
       autoload :SnapshotList, action_root.join("snapshot_list")
       autoload :SnapshotSave, action_root.join("snapshot_save")
