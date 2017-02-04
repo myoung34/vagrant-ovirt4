@@ -28,7 +28,7 @@ module VagrantPlugins
               b2.use CreateVM
               #b2.use ResizeDisk
 
-              #b2.use Provision
+              b2.use Provision
               b2.use CreateNetworkInterfaces
 
               #b2.use SetHostname
@@ -59,6 +59,19 @@ module VagrantPlugins
         end
       end
 
+      def self.action_provision
+        Vagrant::Action::Builder.new.tap do |b|
+          b.use ConfigValidate
+          b.use Call, IsCreated do |env, b2|
+            if !env[:result]
+              b2.use MessageNotCreated
+              next
+            end
+            b2.use Provision
+            b2.use SyncFolders
+          end
+        end
+      end
 
       # This action is called to read the state of the machine. The resulting
       # state is expected to be put into the `:machine_state_id` key.
