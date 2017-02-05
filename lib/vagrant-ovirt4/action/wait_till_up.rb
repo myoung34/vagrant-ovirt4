@@ -48,16 +48,19 @@ module VagrantPlugins
             end
           end
           terminate(env) if env[:interrupted]
-          @logger.info("Got IP address #{env[:ip_address]}")
-          @logger.info("Time for getting IP: #{env[:metrics]["instance_ip_time"]}")
-          
-         terminate(env) if env[:interrupted]
-          @logger.info("Time for SSH ready: #{env[:metrics]["instance_ssh_time"]}")
+          if env[:ip_address].nil?
+            raise NoIPError
+          else
+            @logger.info("Got IP address #{env[:ip_address]}")
+            @logger.info("Time for getting IP: #{env[:metrics]["instance_ip_time"]}")
+            
+            @logger.info("Time for SSH ready: #{env[:metrics]["instance_ssh_time"]}")
 
-          # Booted and ready for use.
-          env[:ui].info(I18n.t("vagrant_ovirt4.ready"))
-          
-          @app.call(env)
+            # Booted and ready for use.
+            env[:ui].info(I18n.t("vagrant_ovirt4.ready"))
+            
+            @app.call(env)
+          end
         end
 
         def recover(env)
