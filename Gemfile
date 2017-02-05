@@ -11,6 +11,7 @@ end
 
 group :testing do
   gem 'rspec-its'
+  gem 'rake'
 end
 
 group :plugins do

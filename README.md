@@ -47,6 +47,9 @@ $ vagrant up --provider=ovirt4
 1. `vagrant status`
 1. `vagrant suspend`
 1. `vagrant resume`
+1. `vagrant snapshot list`
+1. `vagrant snapshot delete [id]`
+1. `vagrant snapshot save [description]`
 
 ### Configuration example
 
