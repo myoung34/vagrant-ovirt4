@@ -1,0 +1,9 @@
+version: '2'
+
+services:
+    ruby:
+        image: ruby-2.2.0
+        container_name: ruby
+        build: .
+        volumes:
+          - .:/srv

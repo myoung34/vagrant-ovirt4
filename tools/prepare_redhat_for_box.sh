@@ -27,7 +27,7 @@ echo "* Found RedHat ${RHEL_MAJOR_VERSION} version."
 
 ATOMIC=false
 which yum >/dev/null 2>&1
-[[ $? -eq 0 ]] && ATOMIC=true
+[[ $? -ne 0 ]] && ATOMIC=true
 
 # Setup hostname vagrant-something.
 FQDN="$1.vagrantup.com"
@@ -40,6 +40,9 @@ fi
 
 # Enable EPEL and Puppet repositories.
 if [[ $ATOMIC != "true" ]]; then
+  yum install -y epel-release
+  yum install -y ovirt-guest-agent-common
+  for i in cloud-init ovirt-guest-agent; do chkconfig $i on; done
   if [[ $RHEL_MAJOR_VERSION -eq 5 ]]; then
     yum install -y \
       http://ftp.astral.ro/mirrors/fedora/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm \
@@ -61,7 +64,8 @@ fi
 # Install some required software.
 if [[ $ATOMIC != "true" ]]; then
   yum -y install openssh-server openssh-clients sudo curl \
-  ruby ruby-devel make gcc rubygems rsync puppet ovirt-guest-agent cloud-init
+  ruby ruby-devel make gcc rubygems rsync puppet ovirt-guest-agent cloud-init \
+  iptables-services net-tools
 fi
 
 chkconfig sshd on
