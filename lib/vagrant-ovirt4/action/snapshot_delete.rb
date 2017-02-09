@@ -13,7 +13,6 @@ module VagrantPlugins
           env[:ui].info(I18n.t("vagrant_ovirt4.snapshot_delete"))
           
           snapshots_service = env[:vms_service].vm_service(env[:machine].id).snapshots_service
-          require 'pry'
           
           snapshot = snapshots_service.snapshot_service(env[:snapshot_name])
 
