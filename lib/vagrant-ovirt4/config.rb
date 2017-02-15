@@ -17,6 +17,7 @@ module VagrantPlugins
       attr_accessor :memory_guaranteed
       attr_accessor :cluster
       attr_accessor :console
+      attr_accessor :cloud_init
 
       def initialize
         @url               = UNSET_VALUE
@@ -32,6 +33,7 @@ module VagrantPlugins
         @memory_guaranteed = UNSET_VALUE
         @cluster           = UNSET_VALUE
         @console           = UNSET_VALUE
+        @cloud_init        = UNSET_VALUE
 
       end
 
@@ -49,6 +51,7 @@ module VagrantPlugins
         @memory_size = 256 if @memory_size == UNSET_VALUE
         @memory_guaranteed = @memory_size if @memory_guaranteed == UNSET_VALUE
         @template = nil if @template == UNSET_VALUE
+        @cloud_init = nil if @cloud_init == UNSET_VALUE
 
       end
 

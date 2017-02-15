@@ -41,11 +41,12 @@ describe VagrantPlugins::OVirtProvider::Config do
     its("template")          { should be_nil }
     its("memory_size")       { should == 256 }
     its("memory_guaranteed") { should == 256 }
+    its("cloud_init")        { should be_nil }
 
   end
 
   describe "overriding defaults" do
-    [:url, :username, :password, :insecure, :debug, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :memory_size, :memory_guaranteed].each do |attribute|
+    [:url, :username, :password, :insecure, :debug, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :memory_size, :memory_guaranteed, :cloud_init].each do |attribute|
 
       it "should not default #{attribute} if overridden" do
         instance.send("#{attribute}=".to_sym, "foo")
