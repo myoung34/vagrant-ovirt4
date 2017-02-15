@@ -65,7 +65,7 @@ module VagrantPlugins
           begin
             server = env[:vms_service].add(attr) 
           rescue OvirtSDK4::Error => e
-            fault_message = /Fault detail is \"\[?(.*)\]?\".*/.match(e.message)[1] rescue e.message
+            fault_message = /Fault detail is \"\[?(.+?)\]?\".*/.match(e.message)[1] rescue e.message
             raise Errors::CreateVMError,
               :error_message => fault_message
           end
