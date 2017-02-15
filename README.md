@@ -72,6 +72,12 @@ Vagrant.configure("2") do |config|
     ovirt.cluster = 'Default'
     ovirt.template = 'Vagrant-Centos7-test'
     ovirt.console = 'vnc'
+    ovirt.memory_size = 512 #MB
+    ovirt.memory_guaranteed = 256 #MB
+    ovirt.cpu_cores = 2
+    ovirt.cpu_sockets = 2
+    ovirt.cpu_threads = 2
+
   end
 end
 ```
@@ -93,16 +99,18 @@ end
   1. `password` => The password for the API. Required. String. No default value.
   1. `insecure` => Allow connecting to SSL sites without certificates. Optional. Bool. Default is `false`
   1. `debug` => Turn on additional log statements. Optional. Bool. Default is `false`.
-  1. `cpus` => Number of CPUs to use for the VM. Optional. Integer. Default is `1`. 
-    a. Note: (TODO) [Unknown usage](https://github.com/myoung34/vagrant-ovirt4/issues/26)
   1. `datacenter` => The name of the ovirt datacenter to create within. Required. String. No Default value.
     a. Note: (TODO) [Unknown usage](https://github.com/myoung34/vagrant-ovirt4/issues/26)
   1. `template` => The name of the template to use for creation. Required. String. No Default value.
-  1. `memory` => The amount of RAM to use. 
-    a. Note: (TODO) [Unknown usage/defaults](https://github.com/myoung34/vagrant-ovirt4/issues/26)
   1. `cluster` => The name of the ovirt cluster to create within. Required. String. No Default value.
   1. `console` => The type of remote viewing protocol to use. Required. String. No Default value.
     a. Note: (TODO) Enforce this to be Spice, VNC, and RDP
+  1. `memory_size` => The physical size of the memory for the VM (in MB). Defaults to `256`
+  1. `memory_guaranteed` => The guaranteed size of the memory for the VM (in MB). Note: cannot be larger than `memory_size`. Defaults to `memory_size`
+  1. `cpu_cores` => The number of CPU cores. Defaults to `1`
+  1. `cpu_sockets` => The number of CPU cores. Defaults to `1`
+  1. `cpu_threads` => The number of CPU threads. Defaults to `1`
+
 
 ## Contributing
 
@@ -111,3 +119,7 @@ end
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## Contributing Notes
+
+1. You must comment out `gemspec` in the [Gemfile](Gemfile), uncomment `vagrant` and `plugins/vagrant-ovirt4` in order for `bundle install` to work and use live code. Not sure why. Too lazy to figure it out.
