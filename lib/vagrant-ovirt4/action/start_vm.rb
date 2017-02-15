@@ -31,11 +31,6 @@ module VagrantPlugins
             iface_options = scoped_hash_override(options, :ovirt)
           end
 
-          my_script = ""
-          #runcmd:
-          # - [ service, network, restart]
-          #"
-
           hostname = env[:machine].config.vm.hostname
           hostname = 'vagrant' if hostname.nil?
 
@@ -63,7 +58,7 @@ module VagrantPlugins
             initialization: {
               host_name: hostname,
               nic_configurations: [nic_configuration],
-              custom_script: my_script,
+              custom_script: env[:machine].provider_config.cloud_init,
             }
           }
           

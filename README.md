@@ -77,6 +77,13 @@ Vagrant.configure("2") do |config|
     ovirt.cpu_cores = 2
     ovirt.cpu_sockets = 2
     ovirt.cpu_threads = 2
+    ovirt.cloud_init =<<EOF
+write_files:
+  - content: |
+      Hello, world!
+    path: /tmp/greeting.txt
+    permissions: '0644'
+EOF
 
   end
 end
@@ -110,6 +117,7 @@ end
   1. `cpu_cores` => The number of CPU cores. Defaults to `1`
   1. `cpu_sockets` => The number of CPU cores. Defaults to `1`
   1. `cpu_threads` => The number of CPU threads. Defaults to `1`
+  1. `cloud_init` => The cloud-init data to pass. Must be properly formatted as yaml. [Docs here](http://cloudinit.readthedocs.io/en/latest/topics/examples.html)
 
 
 ## Contributing

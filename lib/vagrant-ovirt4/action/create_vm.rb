@@ -34,6 +34,7 @@ module VagrantPlugins
           env[:ui].info(" ---- Cores:       #{config.cpu_cores}")
           env[:ui].info(" ---- Sockets:     #{config.cpu_sockets}")
           env[:ui].info(" ---- Threads:     #{config.cpu_threads}")
+          env[:ui].info(" -- Cloud-Init:    #{!config.cloud_init.nil? }")
 
           # Create oVirt VM.
           attr = {
