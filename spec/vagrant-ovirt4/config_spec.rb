@@ -28,21 +28,24 @@ describe VagrantPlugins::OVirtProvider::Config do
       end
     end
 
-    its("url")        { should be_nil }
-    its("username")   { should be_nil }
-    its("password")   { should be_nil }
-    its("insecure")   { should == false }
-    its("debug")      { should == false }
-    its("cpus")       { should == 1 }
-    its("cluster")    { should be_nil }
-    its("console")    { should be_nil }
-    its("template")   { should be_nil }
-    its("memory")     { should == 256 }
+    its("url")               { should be_nil }
+    its("username")          { should be_nil }
+    its("password")          { should be_nil }
+    its("insecure")          { should == false }
+    its("debug")             { should == false }
+    its("cpu_cores")         { should == 1 }
+    its("cpu_sockets")       { should == 1 }
+    its("cpu_threads")       { should == 1 }
+    its("cluster")           { should be_nil }
+    its("console")           { should be_nil }
+    its("template")          { should be_nil }
+    its("memory_size")       { should == 256 }
+    its("memory_guaranteed") { should == 256 }
 
   end
 
   describe "overriding defaults" do
-    [:url, :username, :password, :insecure, :debug, :cpus, :cluster, :console, :template, :memory].each do |attribute|
+    [:url, :username, :password, :insecure, :debug, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :memory_size, :memory_guaranteed].each do |attribute|
 
       it "should not default #{attribute} if overridden" do
         instance.send("#{attribute}=".to_sym, "foo")
