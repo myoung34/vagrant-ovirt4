@@ -11,9 +11,10 @@ end
 
 group :testing do
   gem 'rspec-its'
+  gem 'rspec'
   gem 'rake'
 end
 
 group :plugins do
-  gem 'vagrant-ovirt4', :path => '.'
+  #gem 'vagrant-ovirt4', :path => '.'
 end
