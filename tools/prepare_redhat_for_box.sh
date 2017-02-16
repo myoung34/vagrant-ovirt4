@@ -42,7 +42,6 @@ fi
 if [[ $ATOMIC != "true" ]]; then
   yum install -y epel-release
   yum install -y ovirt-guest-agent-common
-  for i in cloud-init ovirt-guest-agent; do chkconfig $i on; done
   if [[ $RHEL_MAJOR_VERSION -eq 5 ]]; then
     yum install -y \
       http://ftp.astral.ro/mirrors/fedora/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm \
@@ -59,7 +58,14 @@ if [[ $ATOMIC != "true" ]]; then
     echo "Is this a valid major release?"
     exit 1
   fi
+else
+  ostree remote add --set=gpg-verify=false centos-atomic-continuous https://ci.centos.org/artifacts/sig-atomic/rdgo/centos-continuous/ostree/repo/ 
+  rpm-ostree rebase centos-atomic-continuous:centos-atomic-host/${RHEL_MAJOR_VERSION}/x86_64/devel/alpha 
+  rpm-ostree pkg-add epel-release
+  rpm-ostree install ovirt-guest-agent-common
+  systemctl reboot
 fi
+for i in cloud-init ovirt-guest-agent; do chkconfig $i on; done
 
 # Install some required software.
 if [[ $ATOMIC != "true" ]]; then
@@ -109,7 +115,7 @@ rm -f /etc/udev/rules.d/*-net.rules
 rm -fr /var/lib/dhclient/*
 
 # Interface eth0 should always get IP address via dhcp.
-echo $'' > /etc/sysconfig/network-scripts/ifcfg-eth0
+echo $'NM_CONTROLLED=no' > /etc/sysconfig/network-scripts/ifcfg-eth0
 
 # Do some cleanup..
 rm -f /root/.bash_history
