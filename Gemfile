@@ -1,9 +1,7 @@
-source 'https://rubygems.org'
-
-gemspec
+source 'http://rubygems.org'
 
 group :development do
-  #gem 'vagrant', :git => 'git://github.com/mitchellh/vagrant.git'
+  gem 'vagrant', :git => 'git://github.com/mitchellh/vagrant.git'
   gem 'pry'
   gem 'byebug'
   gem 'pry-byebug'
@@ -16,5 +14,5 @@ group :testing do
 end
 
 group :plugins do
-  #gem 'vagrant-ovirt4', :path => '.'
+  gem 'vagrant-ovirt4', :path => '.'
 end

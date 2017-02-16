@@ -17,5 +17,6 @@ Gem::Specification.new do |gem|
   gem.version       = VagrantPlugins::OVirtProvider::VERSION
 
   gem.add_runtime_dependency 'ovirt-engine-sdk', '~> 4.0', '>= 4.0.6'
+  gem.add_runtime_dependency 'filesize'
 
 end

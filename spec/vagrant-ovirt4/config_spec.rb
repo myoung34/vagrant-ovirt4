@@ -46,13 +46,31 @@ describe VagrantPlugins::OVirtProvider::Config do
   end
 
   describe "overriding defaults" do
-    [:url, :username, :password, :insecure, :debug, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :memory_size, :memory_guaranteed, :cloud_init].each do |attribute|
+    [:url, :username, :password, :insecure, :debug, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :cloud_init].each do |attribute|
 
       it "should not default #{attribute} if overridden" do
         instance.send("#{attribute}=".to_sym, "foo")
         instance.finalize!
         instance.send(attribute).should == "foo"
       end
+    end
+  end
+
+  describe "overriding memory defaults" do
+    [:memory_size, :memory_guaranteed].each do |attribute|
+
+      it "should not default #{attribute} if overridden" do
+        instance.send("#{attribute}=".to_sym, "512 MB")
+        instance.finalize!
+        instance.send(attribute).should == 512
+      end
+
+      it "should convert the value" do
+        instance.send("#{attribute}=".to_sym, "1 GB")
+        instance.finalize!
+        instance.send(attribute).should == 1000
+      end
+
     end
   end
 

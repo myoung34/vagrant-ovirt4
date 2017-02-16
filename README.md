@@ -72,8 +72,8 @@ Vagrant.configure("2") do |config|
     ovirt.cluster = 'Default'
     ovirt.template = 'Vagrant-Centos7-test'
     ovirt.console = 'vnc'
-    ovirt.memory_size = 512 #MB
-    ovirt.memory_guaranteed = 256 #MB
+    ovirt.memory_size = '1 GiB' #see https://github.com/dominikh/filesize for usage
+    ovirt.memory_guaranteed = '256 MB' #see https://github.com/dominikh/filesize for usage
     ovirt.cpu_cores = 2
     ovirt.cpu_sockets = 2
     ovirt.cpu_threads = 2
@@ -127,7 +127,3 @@ end
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
-
-## Contributing Notes
-
-1. You must comment out `gemspec` in the [Gemfile](Gemfile), uncomment `vagrant` and `plugins/vagrant-ovirt4` in order for `bundle install` to work and use live code. Not sure why. Too lazy to figure it out.
