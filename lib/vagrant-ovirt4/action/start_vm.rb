@@ -44,13 +44,14 @@ module VagrantPlugins
                 version: OvirtSDK4::IpVersion::V4,
                 address: iface_options[:ip],
                 gateway: iface_options[:gateway],
+                netmask: iface_options[:netmask],
               }
             }
           else
             nic_configuration = {
               name: 'eth0',
               on_boot: true,
-              boot_protocol: OvirtSDK4::BootProtocol::DYNAMIC,
+              boot_protocol: OvirtSDK4::BootProtocol::DHCP,
             }
           end
 
@@ -69,6 +70,9 @@ module VagrantPlugins
           vm_configuration[:placement_policy][:affinity] = config.affinity unless config.affinity.nil?
           vm_configuration.delete(:placement_policy) if vm_configuration[:placement_policy].empty?
 
+          vm_configuration[:initialization][:dns_servers] = iface_options[:dns_servers] unless iface_options[:dns_servers].nil?
+          vm_configuration[:initialization][:dns_search] = iface_options[:dns_search] unless iface_options[:dns_search].nil?
+          
           machine.start(
             use_cloud_init: true,
             vm: vm_configuration
