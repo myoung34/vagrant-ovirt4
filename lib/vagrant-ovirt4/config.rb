@@ -15,6 +15,7 @@ module VagrantPlugins
       attr_accessor :cpu_threads
       attr_accessor :template
       attr_accessor :memory_size
+      attr_accessor :memory_maximum
       attr_accessor :memory_guaranteed
       attr_accessor :cluster
       attr_accessor :console
@@ -31,6 +32,7 @@ module VagrantPlugins
         @cpu_threads       = UNSET_VALUE
         @template          = UNSET_VALUE
         @memory_size       = UNSET_VALUE
+        @memory_maximum    = UNSET_VALUE
         @memory_guaranteed = UNSET_VALUE
         @cluster           = UNSET_VALUE
         @console           = UNSET_VALUE
@@ -50,13 +52,15 @@ module VagrantPlugins
         @cluster = nil if @cluster == UNSET_VALUE
         @console = nil if @console == UNSET_VALUE
         @memory_size = '256 MB' if @memory_size == UNSET_VALUE
+        @memory_maximum = @memory_size if @memory_maximum == UNSET_VALUE
         @memory_guaranteed = @memory_size if @memory_guaranteed == UNSET_VALUE
         @template = nil if @template == UNSET_VALUE
         @cloud_init = nil if @cloud_init == UNSET_VALUE
 
         begin
-          @memory_size = Filesize.from(@memory_size).to_f('MB').to_i
-          @memory_guaranteed = Filesize.from(@memory_guaranteed).to_f('MB').to_i
+          @memory_size = Filesize.from(@memory_size).to_f('B').to_i
+          @memory_maximum = Filesize.from(@memory_maximum).to_f('B').to_i
+          @memory_guaranteed = Filesize.from(@memory_guaranteed).to_f('B').to_i
         rescue ArgumentError 
           raise "Not able to parse either `memory_size` or `memory_guaranteed`. Please verify and check again."
         end

@@ -20,16 +20,15 @@ module VagrantPlugins
           hostname = 'vagrant' if hostname.nil?
 
           # Output the settings we're going to use to the user
-          memory_size = config.memory_size*1024*1024
-          memory_guaranteed = config.memory_guaranteed*1024*1024
           env[:ui].info(I18n.t("vagrant_ovirt4.creating_vm"))
           env[:ui].info(" -- Name:          #{hostname}")
           env[:ui].info(" -- Cluster:       #{config.cluster}")
           env[:ui].info(" -- Template:      #{config.template}")
           env[:ui].info(" -- Console Type:  #{config.console}")
           env[:ui].info(" -- Memory:        ")
-          env[:ui].info(" ---- Memory:      #{config.memory_size} MB")
-          env[:ui].info(" ---- Guaranteed:  #{config.memory_guaranteed} MB")
+          env[:ui].info(" ---- Memory:      #{Filesize.from("#{config.memory_size} B").to_f('MB').to_i} MB")
+          env[:ui].info(" ---- Maximum:     #{Filesize.from("#{config.memory_maximum} B").to_f('MB').to_i} MB")
+          env[:ui].info(" ---- Guaranteed:  #{Filesize.from("#{config.memory_guaranteed} B").to_f('MB').to_i} MB")
           env[:ui].info(" -- Cpu:           ")
           env[:ui].info(" ---- Cores:       #{config.cpu_cores}")
           env[:ui].info(" ---- Sockets:     #{config.cpu_sockets}")
@@ -47,11 +46,12 @@ module VagrantPlugins
                   :threads => config.cpu_threads,
                 },
               },
-              :memory   => memory_size,
-              :memory_policy => {
-                :ballooning => true,
-                :guaranteed => memory_guaranteed,
-              },
+              :memory_policy => OvirtSDK4::MemoryPolicy.new(
+                ballooning: true,
+                guaranteed: config.memory_guaranteed,
+                max: config.memory_maximum,
+              ),
+              :memory   => config.memory_size,
               :cluster  => {
                 :name => config.cluster,
               },

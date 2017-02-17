@@ -39,8 +39,9 @@ describe VagrantPlugins::OVirtProvider::Config do
     its("cluster")           { should be_nil }
     its("console")           { should be_nil }
     its("template")          { should be_nil }
-    its("memory_size")       { should == 256 }
-    its("memory_guaranteed") { should == 256 }
+    its("memory_size")       { should == 256000000 }
+    its("memory_maximum")    { should == 256000000 }
+    its("memory_guaranteed") { should == 256000000 }
     its("cloud_init")        { should be_nil }
 
   end
@@ -57,18 +58,18 @@ describe VagrantPlugins::OVirtProvider::Config do
   end
 
   describe "overriding memory defaults" do
-    [:memory_size, :memory_guaranteed].each do |attribute|
+    [:memory_size, :memory_maximum, :memory_guaranteed].each do |attribute|
 
       it "should not default #{attribute} if overridden" do
         instance.send("#{attribute}=".to_sym, "512 MB")
         instance.finalize!
-        instance.send(attribute).should == 512
+        instance.send(attribute).should == 512000000
       end
 
       it "should convert the value" do
         instance.send("#{attribute}=".to_sym, "1 GB")
         instance.finalize!
-        instance.send(attribute).should == 1000
+        instance.send(attribute).should == 1000000000
       end
 
     end
