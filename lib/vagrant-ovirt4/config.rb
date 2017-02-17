@@ -1,5 +1,6 @@
 require 'vagrant'
 require 'filesize'
+require 'ovirtsdk4'
 
 module VagrantPlugins
   module OVirtProvider
@@ -19,6 +20,8 @@ module VagrantPlugins
       attr_accessor :cluster
       attr_accessor :console
       attr_accessor :cloud_init
+      attr_accessor :affinity
+      attr_accessor :placement_host
 
       def initialize
         @url               = UNSET_VALUE
@@ -35,6 +38,8 @@ module VagrantPlugins
         @cluster           = UNSET_VALUE
         @console           = UNSET_VALUE
         @cloud_init        = UNSET_VALUE
+        @affinity          = UNSET_VALUE
+        @placement_host    = UNSET_VALUE
 
       end
 
@@ -53,6 +58,12 @@ module VagrantPlugins
         @memory_guaranteed = @memory_size if @memory_guaranteed == UNSET_VALUE
         @template = nil if @template == UNSET_VALUE
         @cloud_init = nil if @cloud_init == UNSET_VALUE
+        @affinity = nil if @affinity == UNSET_VALUE
+        @placement_host = nil if @placement_host == UNSET_VALUE
+
+        unless affinity.nil?
+          raise "Invalid affinity. Must be one of #{OvirtSDK4::VmAffinity.constants.map { |s| "'#{s.downcase}'" }.join(' ')}" unless OvirtSDK4::VmAffinity.constants.include? affinity.upcase.to_sym
+        end
 
         begin
           @memory_size = Filesize.from(@memory_size).to_f('MB').to_i

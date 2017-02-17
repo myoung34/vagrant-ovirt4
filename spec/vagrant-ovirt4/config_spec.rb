@@ -42,11 +42,13 @@ describe VagrantPlugins::OVirtProvider::Config do
     its("memory_size")       { should == 256 }
     its("memory_guaranteed") { should == 256 }
     its("cloud_init")        { should be_nil }
+    its("affinity")          { should be_nil }
+    its("placement_host")    { should be_nil }
 
   end
 
   describe "overriding defaults" do
-    [:url, :username, :password, :insecure, :debug, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :cloud_init].each do |attribute|
+    [:url, :username, :password, :insecure, :debug, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :cloud_init, :placement_host].each do |attribute|
 
       it "should not default #{attribute} if overridden" do
         instance.send("#{attribute}=".to_sym, "foo")
@@ -74,4 +76,28 @@ describe VagrantPlugins::OVirtProvider::Config do
     end
   end
 
+  describe "overriding affinity defaults" do
+    [:affinity].each do |attribute|
+
+      context 'valid value' do
+        it "should not default #{attribute} if overridden" do
+          instance.send("#{attribute}=".to_sym, "pinned")
+          instance.finalize!
+          instance.send(attribute).should == "pinned"
+        end
+      end
+
+      context 'invalid value' do
+        it "should error" do
+          expect {
+            instance.send("#{attribute}=".to_sym, "foo")
+            instance.finalize!
+          }.to raise_error(RuntimeError)
+
+        end
+
+      end
+
+    end
+  end
 end

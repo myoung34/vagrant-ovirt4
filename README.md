@@ -118,6 +118,8 @@ end
   1. `cpu_sockets` => The number of CPU cores. Defaults to `1`
   1. `cpu_threads` => The number of CPU threads. Defaults to `1`
   1. `cloud_init` => The cloud-init data to pass. Must be properly formatted as yaml. [Docs here](http://cloudinit.readthedocs.io/en/latest/topics/examples.html)
+  1. `affinity` =>  The affinity to use. [See this for possible uses](http://www.rubydoc.info/gems/ovirt-engine-sdk/OvirtSDK4/VmAffinity). Optional. Invalid will cause a `RuntimeError`
+  1. `placement_host` => The host to start the VM on. Optional.
 
 
 ## Contributing
