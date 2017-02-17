@@ -6,3 +6,4 @@
 /.idea
 *.gem
 /manifests
+hiera.yaml

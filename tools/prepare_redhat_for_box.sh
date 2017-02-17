@@ -65,12 +65,11 @@ else
   rpm-ostree install ovirt-guest-agent-common
   systemctl reboot
 fi
-for i in cloud-init ovirt-guest-agent; do chkconfig $i on; done
 
 # Install some required software.
 if [[ $ATOMIC != "true" ]]; then
   yum -y install openssh-server openssh-clients sudo curl \
-  ruby ruby-devel make gcc rubygems rsync puppet ovirt-guest-agent cloud-init \
+  ruby ruby-devel make gcc rubygems rsync puppet ovirt-guest-agent ovirt-guest-agent-common cloud-init \
   iptables-services net-tools
 fi
 
@@ -104,7 +103,9 @@ chown -R vagrant:vagrant $vagrant_home/.ssh
 
 # Disable firewall and switch SELinux to permissive mode.
 chkconfig iptables off
+chkconfig firewalld off
 chkconfig ip6tables off
+for i in cloud-init ovirt-guest-agent; do chkconfig $i on; done
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/sysconfig/selinux
 [ -f /etc/selinux/config ] && sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 
