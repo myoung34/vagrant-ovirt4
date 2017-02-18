@@ -54,14 +54,21 @@ module VagrantPlugins
             }
           end
 
+          config = env[:machine].provider_config
+
           vm_configuration = {
             initialization: {
               host_name: hostname,
               nic_configurations: [nic_configuration],
-              custom_script: env[:machine].provider_config.cloud_init,
-            }
+              custom_script: config.cloud_init,
+            },
+            placement_policy: {},
           }
-          
+
+          vm_configuration[:placement_policy][:hosts] = [{ :name => config.placement_host }] unless config.placement_host.nil?
+          vm_configuration[:placement_policy][:affinity] = config.affinity unless config.affinity.nil?
+          vm_configuration.delete(:placement_policy) if vm_configuration[:placement_policy].empty?
+
           machine.start(
             use_cloud_init: true,
             vm: vm_configuration
