@@ -73,10 +73,17 @@ module VagrantPlugins
           vm_configuration[:initialization][:dns_servers] = iface_options[:dns_servers] unless iface_options[:dns_servers].nil?
           vm_configuration[:initialization][:dns_search] = iface_options[:dns_search] unless iface_options[:dns_search].nil?
           
-          machine.start(
-            use_cloud_init: true,
-            vm: vm_configuration
-          )
+          begin
+            machine.start(
+              use_cloud_init: true,
+              vm: vm_configuration
+            )
+          rescue OvirtSDK4::Error => e
+            fault_message = /Fault detail is \"\[?(.+?)\]?\".*/.match(e.message)[1] rescue e.message
+            raise Errors::StartVMError,
+              :error_message => fault_message
+
+          end
 
           @app.call(env)
         end
