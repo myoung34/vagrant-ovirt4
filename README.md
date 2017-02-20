@@ -60,8 +60,9 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = 'https://github.com/myoung34/vagrant-ovirt4/blob/master/example_box/dummy.box?raw=true'
 
   config.vm.network :private_network,
-    :ip => '192.168.56.100', :nictype => 'virtio', :netmask => '255.255.255.0', #normal network configuration
-    :ovirt__ip => '192.168.2.198', :ovirt__network_name => 'ovirtmgmt', :ovirt__gateway => '192.168.2.125' # oVirt specific information, overwrites previous on oVirt provider
+    :ovirt__network_name => 'ovirtmgmt' #DHCP
+    # Static configuration
+    #:ovirt__ip => '192.168.2.198', :ovirt__network_name => 'ovirtmgmt', :ovirt__gateway => '192.168.2.125', :ovirt__netmask => '255.255.0.0', :ovirt__dns_servers => '192.168.2.1', :ovirt__dns_search => 'test.local'
 
   config.vm.provider :ovirt4 do |ovirt|
     ovirt.url = 'https://server/ovirt-engine/api'
@@ -107,11 +108,9 @@ end
   1. `insecure` => Allow connecting to SSL sites without certificates. Optional. Bool. Default is `false`
   1. `debug` => Turn on additional log statements. Optional. Bool. Default is `false`.
   1. `datacenter` => The name of the ovirt datacenter to create within. Required. String. No Default value.
-    a. Note: (TODO) [Unknown usage](https://github.com/myoung34/vagrant-ovirt4/issues/26)
   1. `template` => The name of the template to use for creation. Required. String. No Default value.
   1. `cluster` => The name of the ovirt cluster to create within. Required. String. No Default value.
   1. `console` => The type of remote viewing protocol to use. Required. String. No Default value.
-    a. Note: (TODO) Enforce this to be Spice, VNC, and RDP
   1. `memory_size` => The physical size of the memory for the VM (in MB). Defaults to `256`
   1. `memory_guaranteed` => The guaranteed size of the memory for the VM (in MB). Note: cannot be larger than `memory_size`. Defaults to `memory_size`
   1. `cpu_cores` => The number of CPU cores. Defaults to `1`

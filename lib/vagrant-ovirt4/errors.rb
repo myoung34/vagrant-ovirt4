@@ -31,6 +31,10 @@ module VagrantPlugins
         error_key(:no_network_error)
       end
 
+      class NetworkNotFoundError < VagrantOVirtError
+        error_key(:network_net_found_error)
+      end
+
       class NoIPError < VagrantOVirtError
         error_key(:no_ip_error)
       end
