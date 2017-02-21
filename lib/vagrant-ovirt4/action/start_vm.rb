@@ -15,6 +15,8 @@ module VagrantPlugins
         end
 
         def call(env)
+          config = env[:machine].provider_config
+
           env[:ui].info(I18n.t("vagrant_ovirt4.starting_vm"))
 
           machine = env[:vms_service].vm_service(env[:machine].id)
@@ -57,8 +59,6 @@ module VagrantPlugins
             }
           end
 
-          config = env[:machine].provider_config
-
           vm_configuration = {
             initialization: {
               host_name: hostname,
@@ -81,9 +81,13 @@ module VagrantPlugins
               vm: vm_configuration
             )
           rescue OvirtSDK4::Error => e
-            fault_message = /Fault detail is \"\[?(.+?)\]?\".*/.match(e.message)[1] rescue e.message
-            raise Errors::StartVMError,
-              :error_message => fault_message
+            if config.debug
+              raise e
+            else
+              fault_message = /Fault detail is \"\[?(.+?)\]?\".*/.match(e.message)[1] rescue e.message
+              raise Errors::StartVMError,
+                :error_message => fault_message
+            end
 
           end
 

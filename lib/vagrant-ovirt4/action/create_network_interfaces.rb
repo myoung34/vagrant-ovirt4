@@ -17,6 +17,7 @@ module VagrantPlugins
         def call(env)
 
           iface_options = nil
+          config = env[:machine].provider_config
           env[:machine].config.vm.networks.each do |config|
             type, options = config
             # We support private networks only. They mean both the same right now.
@@ -32,7 +33,6 @@ module VagrantPlugins
               raise Errors::NoNetworkError if nics_service.list.count == 0
             else
               # provided a network block of some sort. Search oVirt for the corresponding network_profile_ids
-              config = env[:machine].provider_config
               @logger.info("Finding network #{iface_options[:network_name]} for given cluster #{config.cluster}")
               clusters_service = env[:connection].system_service.clusters_service
               cluster = clusters_service.list(search: "name=#{config.cluster}").first
@@ -63,9 +63,13 @@ module VagrantPlugins
               )
             end
           rescue => e
-            fault_message = /Fault detail is \"\[?(.+?)\]?\".*/.match(e.message)[1] rescue e.message
-            raise Errors::AddInterfaceError,
-              :error_message => fault_message
+            if config.debug
+              raise e
+            else
+              fault_message = /Fault detail is \"\[?(.+?)\]?\".*/.match(e.message)[1] rescue e.message
+              raise Errors::AddInterfaceError,
+                :error_message => fault_message
+            end
           end
 
           # Continue the middleware chain.
