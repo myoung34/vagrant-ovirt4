@@ -31,6 +31,8 @@ module VagrantPlugins
             iface_options = scoped_hash_override(options, :ovirt)
           end
 
+          iface_options = env[:iface_options] unless env[:iface_options].nil? #override settings if set during 'create'
+
           hostname = env[:machine].config.vm.hostname
           hostname = 'vagrant' if hostname.nil?
 
