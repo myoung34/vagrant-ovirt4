@@ -27,9 +27,19 @@ module VagrantPlugins
             iface_options = scoped_hash_override(options, :ovirt)
           end
 
-          raise Errors::NoNetworkError if iface_options[:network_name].nil? 
+          raise Errors::NoNetworkError if iface_options[:network_name].nil?
+          config = env[:machine].provider_config
+          @logger.info("Finding network #{iface_options[:network_name]} for given cluster #{config.cluster}")
+          clusters_service = env[:connection].system_service.clusters_service
+          cluster = clusters_service.list(search: "name=#{config.cluster}").first
           profiles_service = env[:connection].system_service.vnic_profiles_service
-          network_profile_id = profiles_service.list.map { |p| p.id if p.name == iface_options[:network_name] }.first
+          network_profile_ids = profiles_service.list.map do |profile|
+            if env[:connection].follow_link(profile.network).data_center.id == cluster.data_center.id and
+                 profile.name == iface_options[:network_name]
+              profile.id
+            end
+          end
+          network_profile_id = network_profile_ids.compact.first
           raise Errors::NetworkNotFounderror, :network_name => iface_options[:network_name] if network_profile_id.nil?
 
           @logger.info("Creating network interface #{iface}")
