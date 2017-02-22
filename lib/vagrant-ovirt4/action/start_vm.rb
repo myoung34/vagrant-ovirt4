@@ -33,48 +33,52 @@ module VagrantPlugins
             iface_options = scoped_hash_override(options, :ovirt)
           end
 
-          iface_options = env[:iface_options] unless env[:iface_options].nil? #override settings if set during 'create'
-
           hostname = env[:machine].config.vm.hostname
           hostname = 'vagrant' if hostname.nil?
 
           nic_configuration = nil
-          if iface_options[:ip] then
-            nic_configuration = {
-              name: 'eth0',
-              on_boot: true,
-              boot_protocol: OvirtSDK4::BootProtocol::STATIC,
-              ip: {
-                version: OvirtSDK4::IpVersion::V4,
-                address: iface_options[:ip],
-                gateway: iface_options[:gateway],
-                netmask: iface_options[:netmask],
+          unless iface_options.nil?
+            if iface_options[:ip] then
+              nic_configuration = {
+                name: 'eth0',
+                on_boot: true,
+                boot_protocol: OvirtSDK4::BootProtocol::STATIC,
+                ip: {
+                  version: OvirtSDK4::IpVersion::V4,
+                  address: iface_options[:ip],
+                  gateway: iface_options[:gateway],
+                  netmask: iface_options[:netmask],
+                }
               }
-            }
-          else
-            nic_configuration = {
-              name: 'eth0',
-              on_boot: true,
-              boot_protocol: OvirtSDK4::BootProtocol::DHCP,
-            }
-          end
+            else
+              nic_configuration = {
+                name: 'eth0',
+                on_boot: true,
+                boot_protocol: OvirtSDK4::BootProtocol::DHCP,
+              }
+            end
 
-          vm_configuration = {
-            initialization: {
+            initialization = {
               host_name: hostname,
               nic_configurations: [nic_configuration],
               custom_script: config.cloud_init,
-            },
+            }
+
+            initialization[:dns_servers] = iface_options[:dns_servers] unless iface_options[:dns_servers].nil?
+            initialization[:dns_search] = iface_options[:dns_search] unless iface_options[:dns_search].nil?
+          end
+
+          vm_configuration = {
+            initialization: initialization,
             placement_policy: {},
           }
 
           vm_configuration[:placement_policy][:hosts] = [{ :name => config.placement_host }] unless config.placement_host.nil?
           vm_configuration[:placement_policy][:affinity] = config.affinity unless config.affinity.nil?
-          vm_configuration.delete(:placement_policy) if vm_configuration[:placement_policy].empty?
 
-          vm_configuration[:initialization][:dns_servers] = iface_options[:dns_servers] unless iface_options[:dns_servers].nil?
-          vm_configuration[:initialization][:dns_search] = iface_options[:dns_search] unless iface_options[:dns_search].nil?
-          
+          vm_configuration.delete(:placement_policy) if vm_configuration[:placement_policy].empty?
+          vm_configuration.delete(:nic_configurations) if vm_configuration[:nic_configurations].nil? or vm_configuration[:nic_configurations].empty?
+
           begin
             machine.start(
               use_cloud_init: true,
