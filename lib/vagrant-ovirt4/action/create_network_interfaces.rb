@@ -46,9 +46,6 @@ module VagrantPlugins
               network_profile_id = network_profile_ids.compact.first
               # error if they provided a 'network name' but it could not be located in the previous search
               raise Errors::NetworkNotFoundError, :network_name => iface_options[:network_name] if network_profile_id.nil? and !iface_options[:network_name].nil?
-              # we would continue here if they provided network information but not a network name, meaning to use DHCP
-              iface_options.delete(:ip) rescue nil
-              env[:iface_options] = iface_options
 
               # quick and dirty way to look for a 'nic#' that is not already attached to the machine
               iface = (("nic1".."nic8").flat_map { |x| x } - env[:vms_service].vm_service(env[:machine].id).nics_service.list.map(&:name)).first rescue "vagrant_nic1"
