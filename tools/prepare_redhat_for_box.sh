@@ -120,7 +120,6 @@ echo $'' > /etc/sysconfig/network-scripts/ifcfg-eth0
 
 CLOUD_CONFIG=/etc/cloud/cloud.cfg
 grep  -q ' - resolv-conf' $CLOUD_CONFIG || sed -i -e 's/ - timezone/&\n - resolv-conf/' $CLOUD_CONFIG
-chkconfig NetworkManager off
 
 # Do some cleanup..
 rm -f /root/.bash_history
