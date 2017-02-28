@@ -33,7 +33,7 @@ module VagrantPlugins
               # Get VM.
               server = env[:vms_service].vm_service(env[:machine].id)
               if server == nil
-                raise NoVMError, :vm_name => ''
+                raise Errors::NoVMError, :vm_name => ''
               end
 
               nics_service = server.nics_service
@@ -49,7 +49,7 @@ module VagrantPlugins
           end
           terminate(env) if env[:interrupted]
           if env[:ip_address].nil?
-            raise NoIPError
+            raise Errors::NoIPError
           else
             @logger.info("Got IP address #{env[:ip_address]}")
             @logger.info("Time for getting IP: #{env[:metrics]["instance_ip_time"]}")

@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'rspec/core/rake_task'
+require 'kitchen/rake_tasks'
 
 # Immediately sync all stdout so that tools like buildbot can
 # immediately load in the output.
@@ -18,5 +19,15 @@ Bundler::GemHelper.install_tasks
 RSpec::Core::RakeTask.new(:spec) do |t|
   t.rspec_opts = "--order defined"
 end
-# Default task is to run the unit tests
-task :default => :spec
+
+# Default task is to run all tests
+namespace :test do
+  task :all do
+    RSpec::Core::RakeTask.new(:spec)
+    Rake::Task["spec"].execute
+    Kitchen::RakeTasks.new
+    Rake::Task['kitchen:all'].invoke
+  end
+end
+
+task :default => 'test:all'

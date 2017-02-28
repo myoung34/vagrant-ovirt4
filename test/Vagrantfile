@@ -1,0 +1,19 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = 'ovirt4'
+  config.vm.hostname = "testing"
+  config.vm.box_url = 'https://github.com/myoung34/vagrant-ovirt4/blob/master/example_box/dummy.box?raw=true'
+
+  config.vm.network :private_network,
+    :ovirt__ip => '192.168.2.254', :ovirt__network_name => 'ovirtmgmt', :ovirt__gateway => '192.168.2.1', 
+    :ovirt__netmask => '255.255.255.0', :ovirt__dns_servers => '192.168.2.1'
+
+
+  config.vm.provider :ovirt4 do |ovirt|
+    ovirt.url = 'https://ovirt/ovirt-engine/api'
+    ovirt.username = "#{ENV['OVIRT_TEST_USER']}"
+    ovirt.password = "#{ENV['OVIRT_TEST_PASS']}"
+    ovirt.insecure = true
+    ovirt.cluster = 'Default'
+    ovirt.template = 'vagrant-centos7'
+  end
+end

@@ -1,0 +1,199 @@
+<% config[:vagrantfiles].each do |vagrantfile| %>
+require "<%= vagrantfile %>"
+require 'securerandom'
+<% end %>
+
+Vagrant.configure("2") do |c|
+  c.berkshelf.enabled = false if Vagrant.has_plugin?("vagrant-berkshelf")
+  <% if config[:cachier] %>
+  if Vagrant.has_plugin?("vagrant-cachier")
+    c.cache.scope = <%= [':box', ':machine'].include?(config[:cachier]) ? config[:cachier] : ':box' %>
+  end
+  <% end %>
+
+  c.vm.box = "<%= config[:box] %>"
+
+<% if config[:box_url] %>
+  c.vm.box_url = "<%= config[:box_url] %>"
+<% end %>
+
+<% if config[:box_version] %>
+  c.vm.box_version = "<%= config[:box_version] %>"
+<% end %>
+
+<% if !config[:box_check_update].nil? %>
+  c.vm.box_check_update = <%= config[:box_check_update] %>
+<% end %>
+
+<% if !config[:box_download_ca_cert].nil? %>
+  c.vm.box_download_ca_cert = "<%= config[:box_download_ca_cert] %>"
+<% end %>
+
+<% if !config[:box_download_insecure].nil? %>
+  c.vm.box_download_insecure = "<%= config[:box_download_insecure] %>"
+<% end %>
+
+<% if config[:vm_hostname] %>
+  c.vm.hostname = "kitchen-<%= config[:vm_hostname] %>-<%= ENV['VAGRANT_VERSION'] %>-<%= SecureRandom.uuid %>"
+<% end %>
+
+<% if config[:communicator] %>
+  c.vm.communicator = "<%= config[:communicator] %>"
+<% end %>
+
+<% if config[:guest] %>
+  c.vm.guest = "<%= config[:guest] %>"
+<% end %>
+
+<% if config[:communicator] %>
+  <% if config[:username] %>
+    c.<%= config[:communicator] %>.username = "<%= config[:username] %>"
+  <% end %>
+  <% if config[:password] %>
+    c.<%= config[:communicator] %>.password = "<%= config[:password] %>"
+  <% end %>
+<% else %>
+  <% if config[:username] %>
+    c.ssh.username = "<%= config[:username] %>"
+  <% end %>
+  <% if config[:password] %>
+    c.ssh.password = "<%= config[:password] %>"
+  <% end %>
+<% end %>
+
+<% if config[:ssh_key] %>
+  c.ssh.private_key_path = "<%= config[:ssh_key] %>"
+<% end %>
+<% config[:ssh].each do |key, value| %>
+  c.ssh.<%= key %> = <%= [true, false].include?(value) ? value : value.inspect %>
+<% end %>
+<% if config[:winrm] %>
+  <% config[:winrm].each do |key, value| %>
+    c.winrm.<%= key %> = <%= value %>
+  <% end %>
+<% end %>
+
+<% if config[:boot_timeout] %>
+  c.vm.boot_timeout = <%= config[:boot_timeout] %>
+<% end %>
+
+<% Array(config[:network]).each do |opts| %>
+  c.vm.network(:<%= opts[0] %>, <%= opts[1..-1].join(", ") %>)
+<% end %>
+
+  c.vm.synced_folder ".", "/vagrant", disabled: true
+<% config[:synced_folders].each do |source, destination, options| %>
+  c.vm.synced_folder <%= source.inspect %>, <%= destination.inspect %>, <%= options %>
+<% end %>
+
+  c.vm.provider :<%= config[:provider] %> do |p|
+<% case config[:provider]
+   when "virtualbox", /^vmware_/
+     if config[:gui] == true || config[:gui] == false %>
+    p.gui = <%= config[:gui] %>
+<%   end
+   end
+
+   case config[:provider]
+   when "virtualbox", /^vmware_/, "parallels"
+     if config[:linked_clone] == true || config[:linked_clone] == false %>
+    p.linked_clone = <%= config[:linked_clone] %>
+<%   end
+   end %>
+
+<% config[:customize].each do |key, value| %>
+  <% case config[:provider]
+     when "libvirt" %>
+    <% if key == :storage %>
+      <% if value.is_a? String %>
+    p.storage <%= value %>
+      <% elsif value.is_a? Array %>
+        <% value.each do |v| %>
+    p.storage <%= v %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <% if value.is_a? String %>
+    p.<%= key %> = "<%= value%>"
+      <% else %>
+    p.<%= key %> = <%= value%>
+      <% end %>
+    <% end %>
+  <% when "lxc" %>
+    <% if key == :container_name %>
+    p.container_name = <%= value == ":machine" ? value : "\"#{value}\"" %>
+    <% elsif key == :backingstore %>
+    p.backingstore = "<%= value %>"
+    <% elsif key == :backingstore_options %>
+      <% config[:customize][:backingstore_options].each do |opt, opt_val| %>
+    p.backingstore_option "--<%= opt %>", "<%= opt_val %>"
+      <% end %>
+    <% elsif key == :include %>
+      <% Array(value).each do |include| %>
+    p.customize "<%= key %>", "<%= include %>"
+      <% end %>
+    <% else %>
+    p.customize "<%= key %>", "<%= value %>"
+    <% end %>
+  <% when "managed" %>
+    <% if key == :server %>
+    p.server = "<%= value %>"
+    <% end %>
+  <% when "parallels" %>
+    <% if key == :memory || key == :cpus %>
+    p.<%= key %> = <%= value %>
+    <% else %>
+    p.customize ["set", :id, "--<%= key.to_s.gsub('_', '-') %>", "<%= value %>"]
+    <% end %>
+  <% when "softlayer" %>
+    <% if key == :disk_capacity %>
+    p.<%= key %> = <%= value %>
+    <% else %>
+    p.<%= key %> = "<%= value %>"
+    <% end %>
+  <% when "virtualbox" %>
+    <% if key == :createhd %>
+    p.customize ["createhd", "--filename", "<%= value[:filename] %>", "--size", <%= value[:size] %>]
+    <% elsif key == :storageattach %>
+      <% options = [] %>
+      <% value.each do |storageattach_option_key, storageattach_option_value|
+           options << "\"--#{storageattach_option_key}\""
+           if storageattach_option_value.instance_of? Fixnum
+             options << storageattach_option_value
+           else
+             options << "\"#{storageattach_option_value}\""
+           end
+         end %>
+    p.customize ["storageattach", :id, <%= options.join(', ') %>]
+    <% elsif key == :cpuidset %>
+      <% ids = [] %>
+      <% value.each do | id |
+           ids << "\"#{id}\""
+         end %>
+    p.customize ["modifyvm", :id, "--cpuidset", <%= ids.join(', ') %>]
+    <% else %>
+    p.customize ["modifyvm", :id, "--<%= key %>", "<%= value %>"]
+    <% end %>
+  <% when /^vmware_/ %>
+    <% if key == :memory %>
+      <% unless config[:customize].include?(:memsize) %>
+    p.vmx["memsize"] = "<%= value %>"
+      <% end %>
+    <% elsif key == :cpus %>
+      <% unless config[:customize].include?(:numvcpus) %>
+    p.vmx["numvcpus"] = "<%= value %>"
+      <% end %>
+    <% else %>
+    p.vmx["<%= key %>"] = "<%= value %>"
+    <% end %>
+  <% when "openstack", "cloudstack", "hyperv", "ovirt3", "ovirt4", "rackspace", "aws" %>
+    <% if value.is_a? String %>
+    p.<%= key %> = "<%= value%>"
+    <% else  %>
+    p.<%= key %> = <%= value%>
+    <% end  %>
+  <% end %>
+<% end %>
+  end
+
+end
