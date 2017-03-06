@@ -54,8 +54,10 @@ en:
       short_down: |-
         down
     errors:
+      remove_vm_error: |-
+        Error removing VM '%{vm_name}'. oVirt error message was '%{error_message}'
       no_vm_error: |-
-        No VM %{vm_name} found.
+        No VM found with id '%{vm_id}'. oVirt error message was '%{error_message}'.
       create_vm_error: |-
         Creation failed. oVirt error message was '%{error_message}'
       start_vm_error: |-

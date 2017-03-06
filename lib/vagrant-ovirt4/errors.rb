@@ -46,6 +46,10 @@ module VagrantPlugins
       class RemoveSnapshotError < VagrantOVirtError
         error_key(:remove_snapshot_error)
       end
+
+      class RemoveVMError < VagrantOVirtError
+        error_key(:remove_vm_error)
+      end
     end
   end
 end

@@ -14,7 +14,20 @@ module VagrantPlugins
           env[:ui].info(I18n.t("vagrant_ovirt4.destroy_vm"))
 
           vm_service = env[:vms_service].vm_service(env[:machine].id)
-          vm_service.remove
+          begin
+            vm_service.remove
+          rescue OvirtSDK4::Error => e
+            fault_message = /Fault detail is \"\[?(.+?)\]?\".*/.match(e.message)[1] rescue e.message
+            retry if e.message =~ /Please try again/
+
+            if config.debug
+              raise e
+            else
+              raise Errors::RemoveVMError,
+                :error_message => fault_message
+            end
+          end
+
           env[:machine].id = nil
 
           @app.call(env)
