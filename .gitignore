@@ -7,3 +7,4 @@
 *.gem
 /manifests
 hiera.yaml
+.kitchen

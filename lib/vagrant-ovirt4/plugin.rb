@@ -8,9 +8,9 @@ end
 
 # This is a sanity check to make sure no one is attempting to install
 # this into an early Vagrant version.
-# Note: snapshots only available in 1.8+
-if Vagrant::VERSION < '1.8.0'
-  raise "The Vagrant oVirt v4 plugin is only compatible with Vagrant 1.8+"
+# Note: snapshots only available in 1.9.1+
+if Vagrant::VERSION < '1.9.1'
+  raise "The Vagrant oVirt v4 plugin is only compatible with Vagrant 1.9.1+"
 end
 
 module VagrantPlugins

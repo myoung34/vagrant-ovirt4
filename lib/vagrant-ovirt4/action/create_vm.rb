@@ -66,10 +66,12 @@ module VagrantPlugins
           begin
             server = env[:vms_service].add(attr) 
           rescue OvirtSDK4::Error => e
+            fault_message = /Fault detail is \"\[?(.+?)\]?\".*/.match(e.message)[1] rescue e.message
+            retry if e.message =~ /Related operation is currently in progress/
+
             if config.debug
               raise e
             else
-              fault_message = /Fault detail is \"\[?(.+?)\]?\".*/.match(e.message)[1] rescue e.message
               raise Errors::CreateVMError,
                 :error_message => fault_message
             end
@@ -81,17 +83,18 @@ module VagrantPlugins
           # Wait till all volumes are ready.
           env[:ui].info(I18n.t("vagrant_ovirt4.wait_for_ready_vm"))
           for i in 0..300
-            ready = true
+            disk_ready = true
             vm_service = env[:vms_service].vm_service(env[:machine].id)
             disk_attachments_service = vm_service.disk_attachments_service
             disk_attachments = disk_attachments_service.list
             disk_attachments.each do |disk_attachment|
               disk = env[:connection].follow_link(disk_attachment.disk)
               if disk.status != 'ok'
-                ready = false
+                disk_ready = false
                 break
               end
             end
+            ready = (disk_ready and env[:vms_service].vm_service(server.id).get.status.to_sym == :down)
             break if ready
             sleep 2
           end

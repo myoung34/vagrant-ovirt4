@@ -106,6 +106,8 @@ chkconfig iptables off
 chkconfig firewalld off
 chkconfig ip6tables off
 for i in cloud-init ovirt-guest-agent; do chkconfig $i on; done
+chkconfig NetworkManager off
+
 sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/sysconfig/selinux
 [ -f /etc/selinux/config ] && sed -i 's/SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 
@@ -121,8 +123,11 @@ echo $'' > /etc/sysconfig/network-scripts/ifcfg-eth0
 CLOUD_CONFIG=/etc/cloud/cloud.cfg
 grep  -q ' - resolv-conf' $CLOUD_CONFIG || sed -i -e 's/ - timezone/&\n - resolv-conf/' $CLOUD_CONFIG
 
+# Chef
+[[ $ATOMIC != "true" ]] && curl -L --silent https://omnitruck.chef.io/install.sh | bash
+
+
 # Do some cleanup..
 rm -f /root/.bash_history
 rm -f /root/authorized_keys
 [[ $ATOMIC != "true" ]] && yum clean all
-

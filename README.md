@@ -121,6 +121,25 @@ end
   1. `placement_host` => The host to start the VM on. Optional.
 
 
+## Testing
+
+Currently pull-requests are tested via [test-kitchen using kitchen-vagrant](https://github.com/test-kitchen/kitchen-vagrant).
+See [Jenkinsfile](Jenkinsfile) for more information. 
+If you'd like to run them yourself, however, they make not work in all setups. For example they assume `192.168.2.0/24`, host pinning will probably not have a host that's in all set ups, and the template names might not match.
+
+To run Unit tests: `bundle install; bundle exec rspec`
+
+To run acceptance tests:
+
+```bash
+export OVIRT_URL='https://yoururl/ovirt-engine/api''
+export OVIRT_USERNAME='yourname@internal'
+export OVIRT_PASSWORD='yourpassword!'
+gem build *.gemspec
+vagrant plugin install *.gem
+bundle exec kitchen test all
+```
+
 ## Contributing
 
 1. Fork it

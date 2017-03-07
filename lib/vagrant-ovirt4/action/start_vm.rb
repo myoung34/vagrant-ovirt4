@@ -85,12 +85,16 @@ module VagrantPlugins
               vm: vm_configuration
             )
           rescue OvirtSDK4::Error => e
-            if config.debug
-              raise e
-            else
-              fault_message = /Fault detail is \"\[?(.+?)\]?\".*/.match(e.message)[1] rescue e.message
-              raise Errors::StartVMError,
-                :error_message => fault_message
+            fault_message = /Fault detail is \"\[?(.+?)\]?\".*/.match(e.message)[1] rescue e.message
+            retry if e.message =~ /Please try again/
+
+            if e.message !~ /VM is running/
+              if config.debug
+                raise e
+              else
+                raise Errors::StartVMError,
+                  :error_message => fault_message
+              end
             end
 
           end
