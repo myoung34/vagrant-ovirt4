@@ -57,7 +57,7 @@ en:
       remove_vm_error: |-
         Error removing VM '%{vm_name}'. oVirt error message was '%{error_message}'
       no_vm_error: |-
-        No VM found with id '%{vm_id}'. oVirt error message was '%{error_message}'.
+        No VM found with id '%{vm_id}'
       create_vm_error: |-
         Creation failed. oVirt error message was '%{error_message}'
       start_vm_error: |-

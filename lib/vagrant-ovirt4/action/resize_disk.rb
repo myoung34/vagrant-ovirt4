@@ -27,8 +27,7 @@ module VagrantPlugins
             machine = OVirtProvider::Util::Collection.find_matching(
               env[:ovirt_compute].servers.all, env[:machine].id.to_s)
           rescue => e
-            raise Errors::NoVMError,
-              :vm_name => env[:machine].id.to_s
+            raise Errors::NoVMError, :vm_id => env[:machine].id
           end
 
           # Extend disk size if necessary
