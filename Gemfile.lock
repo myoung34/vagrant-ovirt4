@@ -26,7 +26,7 @@ PATH
   specs:
     vagrant-ovirt4 (1.2.0)
       filesize (~> 0)
-      ovirt-engine-sdk (~> 4.1, >= 4.1.0)
+      ovirt-engine-sdk (~> 4.0.1)
 
 GEM
   remote: http://rubygems.org/
@@ -119,7 +119,7 @@ GEM
     nokogiri (1.6.7.1)
       mini_portile2 (~> 2.0.0.rc2)
     nori (2.6.0)
-    ovirt-engine-sdk (4.1.4)
+    ovirt-engine-sdk (4.0.12)
       json
     parallel (1.10.0)
     parslet (1.5.0)
