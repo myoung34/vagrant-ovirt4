@@ -33,7 +33,7 @@ module VagrantPlugins
               # Get VM.
               server = env[:vms_service].vm_service(env[:machine].id)
               if server == nil
-                raise Errors::NoVMError, :vm_name => ''
+                raise Errors::NoVMError, :vm_id => env[:machine].id
               end
 
               nics_service = server.nics_service

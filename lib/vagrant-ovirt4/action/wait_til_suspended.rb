@@ -20,7 +20,7 @@ module VagrantPlugins
           for i in 1..300
             ready = true
             if vm_service.get == nil
-              raise NoVMError, :vm_name => ''
+              raise NoVMError, :vm_id => env[:machine].id
             end
 
             if vm_service.get.status.to_sym != :suspended
