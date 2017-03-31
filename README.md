@@ -78,6 +78,7 @@ Vagrant.configure("2") do |config|
     ovirt.cpu_cores = 2
     ovirt.cpu_sockets = 2
     ovirt.cpu_threads = 2
+    ovirt.bios_serial = aaabbbb-ccc-dddd
     ovirt.cloud_init =<<EOF
 write_files:
   - content: |
@@ -119,6 +120,7 @@ end
   1. `cloud_init` => The cloud-init data to pass. Must be properly formatted as yaml. [Docs here](http://cloudinit.readthedocs.io/en/latest/topics/examples.html)
   1. `affinity` =>  The affinity to use. [See this for possible uses](http://www.rubydoc.info/gems/ovirt-engine-sdk/OvirtSDK4/VmAffinity). Optional. Invalid will cause a `RuntimeError`
   1. `placement_host` => The host to start the VM on. Optional.
+  1. `bios_serial` => The BIOS serial number to assign. Optional.
 
 
 ## Testing

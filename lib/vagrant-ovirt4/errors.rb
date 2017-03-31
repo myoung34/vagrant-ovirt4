@@ -50,6 +50,10 @@ module VagrantPlugins
       class RemoveVMError < VagrantOVirtError
         error_key(:remove_vm_error)
       end
+
+      class UpdateBiosError < VagrantOVirtError
+        error_key(:update_bios_error)
+      end
     end
   end
 end

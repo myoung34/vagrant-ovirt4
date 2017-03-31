@@ -60,6 +60,8 @@ en:
         No VM found with id '%{vm_id}'
       create_vm_error: |-
         Creation failed. oVirt error message was '%{error_message}'
+      update_bios_error: |-
+        BIOS update failed. oVirt error message was '%{error_message}'
       start_vm_error: |-
         Unable to start VM: %{error_message}
       no_network_error: |-

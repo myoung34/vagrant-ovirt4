@@ -23,6 +23,7 @@ module VagrantPlugins
       attr_accessor :cloud_init
       attr_accessor :affinity
       attr_accessor :placement_host
+      attr_accessor :bios_serial
 
       def initialize
         @url               = UNSET_VALUE
@@ -42,6 +43,7 @@ module VagrantPlugins
         @cloud_init        = UNSET_VALUE
         @affinity          = UNSET_VALUE
         @placement_host    = UNSET_VALUE
+        @bios_serial       = UNSET_VALUE
 
       end
 
@@ -63,6 +65,7 @@ module VagrantPlugins
         @cloud_init = nil if @cloud_init == UNSET_VALUE
         @affinity = nil if @affinity == UNSET_VALUE
         @placement_host = nil if @placement_host == UNSET_VALUE
+        @bios_serial = nil if @bios_serial == UNSET_VALUE
 
         unless affinity.nil?
           raise "Invalid affinity. Must be one of #{OvirtSDK4::VmAffinity.constants.map { |s| "'#{s.downcase}'" }.join(' ')}" unless OvirtSDK4::VmAffinity.constants.include? affinity.upcase.to_sym
