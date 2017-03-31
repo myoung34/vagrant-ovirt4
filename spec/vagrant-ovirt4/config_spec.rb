@@ -45,11 +45,12 @@ describe VagrantPlugins::OVirtProvider::Config do
     its("cloud_init")        { should be_nil }
     its("affinity")          { should be_nil }
     its("placement_host")    { should be_nil }
+    its("bios_serial")       { should be_nil }
 
   end
 
   describe "overriding defaults" do
-    [:url, :username, :password, :insecure, :debug, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :cloud_init, :placement_host].each do |attribute|
+    [:url, :username, :password, :insecure, :debug, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :cloud_init, :placement_host, :bios_serial].each do |attribute|
 
       it "should not default #{attribute} if overridden" do
         instance.send("#{attribute}=".to_sym, "foo")

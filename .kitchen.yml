@@ -41,3 +41,15 @@ suites:
           runcmd:
             - ifdown eth0
             - service network restart
+  - name: bios_serial
+    driver_config:
+      vm_hostname: bios-serial
+      network:
+        - ["private_network", {ovirt__network_name: 'ovirtmgmt'}]
+      customize:
+        template: vagrant-centos7
+        bios_serial: 'banana-hammock'
+        cloud_init: |
+          runcmd:
+            - ifdown eth0
+            - service network restart

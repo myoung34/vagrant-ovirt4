@@ -25,6 +25,7 @@ module VagrantPlugins
           env[:ui].info(" -- Cluster:       #{config.cluster}")
           env[:ui].info(" -- Template:      #{config.template}")
           env[:ui].info(" -- Console Type:  #{config.console}")
+          env[:ui].info(" -- BIOS Serial:   #{config.bios_serial}")
           env[:ui].info(" -- Memory:        ")
           env[:ui].info(" ---- Memory:      #{Filesize.from("#{config.memory_size} B").to_f('MB').to_i} MB")
           env[:ui].info(" ---- Maximum:     #{Filesize.from("#{config.memory_maximum} B").to_f('MB').to_i} MB")
@@ -102,6 +103,29 @@ module VagrantPlugins
           if not ready
             raise Errors::WaitForReadyVmTimeout
           end
+
+          begin
+            if config.bios_serial
+              vm_service = env[:vms_service].vm_service(env[:machine].id)
+              vm_service.update(
+                serial_number: {
+                  policy: OvirtSDK4::SerialNumberPolicy::CUSTOM,
+                  value: config.bios_serial,
+                }
+              )
+            end
+          rescue OvirtSDK4::Error => e
+            fault_message = /Fault detail is \"\[?(.+?)\]?\".*/.match(e.message)[1] rescue e.message
+            retry if e.message =~ /Related operation is currently in progress/
+
+            if config.debug
+              raise e
+            else
+              raise Errors::UpdateBiosError,
+                :error_message => fault_message
+            end
+          end
+
 
           @app.call(env)
         end
