@@ -94,7 +94,7 @@ sed -i 's/Defaults\s*requiretty/Defaults !requiretty/' /etc/sudoers
 sed -i 's/.*UseDNS.*/UseDNS no/' /etc/ssh/sshd_config
 
 vagrant_home=/home/vagrant
-[ -d $vagrant_home/.ssh ] || mkdir $vagrant_home/.ssh
+[ -f $vagrant_home/.ssh ] || mkdir $vagrant_home/.ssh
 chmod 700 $vagrant_home/.ssh
 curl -k -L --silent https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub > $vagrant_home/.ssh/authorized_keys
 chmod 600 $vagrant_home/.ssh/authorized_keys
