@@ -33,6 +33,7 @@ describe VagrantPlugins::OVirtProvider::Config do
     its("password")          { should be_nil }
     its("insecure")          { should == false }
     its("debug")             { should == false }
+    its("filtered_api")      { should == false }
     its("cpu_cores")         { should == 1 }
     its("cpu_sockets")       { should == 1 }
     its("cpu_threads")       { should == 1 }
@@ -51,7 +52,7 @@ describe VagrantPlugins::OVirtProvider::Config do
   end
 
   describe "overriding defaults" do
-    [:url, :username, :password, :insecure, :debug, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :cloud_init, :placement_host, :bios_serial, :optimized_for].each do |attribute|
+    [:url, :username, :password, :insecure, :debug, :filtered_api, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :cloud_init, :placement_host, :bios_serial, :optimized_for].each do |attribute|
 
       it "should not default #{attribute} if overridden" do
         instance.send("#{attribute}=".to_sym, "foo")

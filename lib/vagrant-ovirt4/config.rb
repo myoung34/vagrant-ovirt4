@@ -11,6 +11,7 @@ module VagrantPlugins
       attr_accessor :password
       attr_accessor :insecure
       attr_accessor :debug
+      attr_accessor :filtered_api
       attr_accessor :cpu_cores
       attr_accessor :cpu_sockets
       attr_accessor :cpu_threads
@@ -32,6 +33,7 @@ module VagrantPlugins
         @password          = UNSET_VALUE
         @insecure          = UNSET_VALUE
         @debug             = UNSET_VALUE
+        @filtered_api      = UNSET_VALUE
         @cpu_cores         = UNSET_VALUE
         @cpu_sockets       = UNSET_VALUE
         @cpu_threads       = UNSET_VALUE
@@ -55,6 +57,7 @@ module VagrantPlugins
         @password = nil if @password == UNSET_VALUE
         @insecure = false if @insecure == UNSET_VALUE
         @debug = false if @debug == UNSET_VALUE
+        @filtered_api = false if @filtered_api == UNSET_VALUE
         @cpu_cores = 1 if @cpu_cores == UNSET_VALUE
         @cpu_sockets = 1 if @cpu_sockets == UNSET_VALUE
         @cpu_threads = 1 if @cpu_threads == UNSET_VALUE
