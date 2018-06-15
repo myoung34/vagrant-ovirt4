@@ -78,6 +78,7 @@ module VagrantPlugins
       # state is expected to be put into the `:machine_state_id` key.
       def self.action_read_state
         Vagrant::Action::Builder.new.tap do |b|
+          b.use HandleBox
           b.use ConfigValidate
           b.use ConnectOVirt
           b.use ReadState
