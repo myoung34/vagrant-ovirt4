@@ -70,6 +70,7 @@ Vagrant.configure("2") do |config|
     ovirt.password = "password"
     ovirt.insecure = true
     ovirt.debug = true
+    ovirt.filtered_api = true #see http://www.ovirt.org/develop/release-management/features/infra/user-portal-permissions/
     ovirt.cluster = 'Default'
     ovirt.template = 'Vagrant-Centos7-test'
     ovirt.console = 'vnc'

@@ -21,6 +21,7 @@ module VagrantPlugins
           conn_attr[:password] = config.password if config.password
           conn_attr[:debug] = config.debug if config.debug
           conn_attr[:insecure] = true if config.insecure
+          conn_attr[:headers] = {'Filter' => true} if config.filtered_api
 
           @logger.info("Connecting to oVirt (#{config.url}) ...")
           OVirtProvider.ovirt_connection = OvirtSDK4::Connection.new(conn_attr)          
