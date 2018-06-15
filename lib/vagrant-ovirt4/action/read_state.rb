@@ -33,7 +33,7 @@ module VagrantPlugins
           end
           nics_service = server.nics_service
           nics = nics_service.list
-          ip_addr = nics.collect { |nic_attachment| env[:connection].follow_link(nic_attachment).reported_devices.collect { |dev| dev.ips.collect { |ip| ip.address if ip.version == 'v4' } } }.flatten.reject { |ip| ip.nil? }.first rescue nil
+          ip_addr = nics.collect { |nic_attachment| env[:connection].follow_link(nic_attachment).reported_devices.collect { |dev| dev.ips.collect { |ip| ip.address if ip.version == 'v4' } unless dev.ips.nil? } }.flatten.reject { |ip| ip.nil? }.first rescue nil
           unless ip_addr.nil?
             env[:ip_address] = ip_addr
             @logger.debug("Got output #{env[:ip_address]}")
