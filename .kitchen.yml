@@ -53,3 +53,31 @@ suites:
           runcmd:
             - ifdown eth0
             - service network restart
+  - name: optimized_for_default
+    verifier:
+      name: shell
+      command: curl --silent -k -L --user "${OVIRT_USERNAME}:${OVIRT_PASSWORD}" --header 'Content-Type: application/xml' --header 'Accept: application/xml' ${OVIRT_URL}/vms/d3f659e1-21ff-42a0-b5fa-7c2f74a36c2b | xmllint --xpath '/vm/type/text()' - | grep desktop
+    driver_config:
+      vm_hostname: optimized-for
+      network:
+        - ["private_network", {ovirt__network_name: 'ovirtmgmt'}]
+      customize:
+        template: vagrant-centos7
+        cloud_init: |
+          runcmd:
+            - ifdown eth0
+            - service network restart
+  - name: optimized_for_set
+    verifier:
+      name: shell
+      command: test/integration/optimized_for.sh
+    driver_config:
+      vm_hostname: optimized-for
+      network:
+        - ["private_network", {ovirt__network_name: 'ovirtmgmt'}]
+      customize:
+        template: vagrant-centos7
+        cloud_init: |
+          runcmd:
+            - ifdown eth0
+            - service network restart

@@ -80,6 +80,7 @@ Vagrant.configure("2") do |config|
     ovirt.cpu_sockets = 2
     ovirt.cpu_threads = 2
     ovirt.bios_serial = aaabbbb-ccc-dddd
+    ovirt.optimized_for = 'server'
     ovirt.cloud_init =<<EOF
 write_files:
   - content: |
@@ -122,6 +123,7 @@ end
   1. `affinity` =>  The affinity to use. [See this for possible uses](http://www.rubydoc.info/gems/ovirt-engine-sdk/OvirtSDK4/VmAffinity). Optional. Invalid will cause a `RuntimeError`
   1. `placement_host` => The host to start the VM on. Optional.
   1. `bios_serial` => The BIOS serial number to assign. Optional.
+  1. `optimized_for` => The "optimized for" setting. Can be one of 'Desktop' or 'Server' (case insensitive). Optional.
 
 
 ## Testing
