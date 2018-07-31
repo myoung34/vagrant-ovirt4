@@ -110,7 +110,6 @@ end
   1. `password` => The password for the API. Required. String. No default value.
   1. `insecure` => Allow connecting to SSL sites without certificates. Optional. Bool. Default is `false`
   1. `debug` => Turn on additional log statements. Optional. Bool. Default is `false`.
-  1. `datacenter` => The name of the ovirt datacenter to create within. Required. String. No Default value.
   1. `template` => The name of the template to use for creation. Required. String. No Default value.
   1. `cluster` => The name of the ovirt cluster to create within. Required. String. No Default value.
   1. `console` => The type of remote viewing protocol to use. Required. String. No Default value.
