@@ -25,22 +25,30 @@ module VagrantPlugins
               :vm_name => env[:machine].id.to_s
           end
 
-          iface_options = nil
-          env[:machine].config.vm.networks.each do |config|
-            type, options = config
-            next unless [:private_network].include? type
-
-            iface_options = scoped_hash_override(options, :ovirt)
-          end
-
+          # FIX MULTIPLE NETWORK INTERFACES
           hostname = env[:machine].config.vm.hostname
           hostname = 'vagrant' if hostname.nil?
 
-          nic_configuration = nil
-          unless iface_options.nil?
+          initialization = {
+            host_name: hostname,
+            nic_configurations: [],
+            custom_script: config.cloud_init,
+          }
+
+          configured_ifaces_options = []
+          env[:machine].config.vm.networks.each do |network|
+            type, options = network
+            next unless type == :private_network
+
+            configured_ifaces_options << scoped_hash_override(options, :ovirt)
+          end
+
+          (0...configured_ifaces_options.length()).each do |iface_index|
+            iface_options = configured_ifaces_options[iface_index]
+
             if iface_options[:ip] then
               nic_configuration = {
-                name: 'eth0',
+                name: "eth#{iface_index}",
                 on_boot: true,
                 boot_protocol: OvirtSDK4::BootProtocol::STATIC,
                 ip: {
@@ -52,21 +60,17 @@ module VagrantPlugins
               }
             else
               nic_configuration = {
-                name: 'eth0',
+                name: "eth#{iface_index}",
                 on_boot: true,
                 boot_protocol: OvirtSDK4::BootProtocol::DHCP,
               }
             end
 
-            initialization = {
-              host_name: hostname,
-              nic_configurations: [nic_configuration],
-              custom_script: config.cloud_init,
-            }
-
+            initialization[:nic_configurations] << nic_configuration
             initialization[:dns_servers] = iface_options[:dns_servers] unless iface_options[:dns_servers].nil?
             initialization[:dns_search] = iface_options[:dns_search] unless iface_options[:dns_search].nil?
           end
+          # END FIX MULTIPLE NETWORK INTERFACES
 
           vm_configuration = {
             initialization: initialization,
