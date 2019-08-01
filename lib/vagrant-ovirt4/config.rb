@@ -26,6 +26,8 @@ module VagrantPlugins
       attr_accessor :placement_host
       attr_accessor :bios_serial
       attr_accessor :optimized_for
+      attr_accessor :description
+      attr_accessor :comment
 
       def initialize
         @url               = UNSET_VALUE
@@ -48,6 +50,8 @@ module VagrantPlugins
         @placement_host    = UNSET_VALUE
         @bios_serial       = UNSET_VALUE
         @optimized_for     = UNSET_VALUE
+        @description       = UNSET_VALUE
+        @comment           = UNSET_VALUE
 
       end
 
@@ -72,6 +76,8 @@ module VagrantPlugins
         @placement_host = nil if @placement_host == UNSET_VALUE
         @bios_serial = nil if @bios_serial == UNSET_VALUE
         @optimized_for = nil if @optimized_for == UNSET_VALUE
+        @description = '' if @description == UNSET_VALUE
+        @comment = '' if @comment == UNSET_VALUE
 
         unless optimized_for.nil?
           raise "Invalid 'optimized_for'. Must be one of #{OvirtSDK4::VmType.constants.map { |s| "'#{s.downcase}'" }.join(' ')}" unless OvirtSDK4::VmType.constants.include? optimized_for.upcase.to_sym

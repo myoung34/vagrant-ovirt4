@@ -48,11 +48,13 @@ describe VagrantPlugins::OVirtProvider::Config do
     its("placement_host")    { should be_nil }
     its("bios_serial")       { should be_nil }
     its("optimized_for")     { should be_nil }
+    its("description")       { should == '' }
+    its("comment")           { should == '' }
 
   end
 
   describe "overriding defaults" do
-    [:url, :username, :password, :insecure, :debug, :filtered_api, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :cloud_init, :placement_host, :bios_serial, :optimized_for].each do |attribute|
+    [:url, :username, :password, :insecure, :debug, :filtered_api, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :cloud_init, :placement_host, :bios_serial, :optimized_for, :description, :comment].each do |attribute|
 
       it "should not default #{attribute} if overridden" do
         instance.send("#{attribute}=".to_sym, "foo")
