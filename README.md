@@ -74,6 +74,7 @@ Vagrant.configure("2") do |config|
     ovirt.cluster = 'Default'
     ovirt.template = 'Vagrant-Centos7-test'
     ovirt.console = 'vnc'
+    ovirt.disk_size = '15 GB' # only growing is supported. works the same way as below memory settings
     ovirt.memory_size = '1 GiB' #see https://github.com/dominikh/filesize for usage
     ovirt.memory_guaranteed = '256 MB' #see https://github.com/dominikh/filesize for usage
     ovirt.cpu_cores = 2
