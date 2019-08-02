@@ -27,6 +27,8 @@ module VagrantPlugins
           env[:ui].info(" -- Console Type:  #{config.console}")
           env[:ui].info(" -- BIOS Serial:   #{config.bios_serial}")
           env[:ui].info(" -- Optimized For: #{config.optimized_for}")
+          env[:ui].info(" -- Description:   #{config.description}")
+          env[:ui].info(" -- Comment:       #{config.comment}")
           env[:ui].info(" -- Memory:        ")
           env[:ui].info(" ---- Memory:      #{Filesize.from("#{config.memory_size} B").to_f('MB').to_i} MB")
           env[:ui].info(" ---- Maximum:     #{Filesize.from("#{config.memory_maximum} B").to_f('MB').to_i} MB")
@@ -40,6 +42,8 @@ module VagrantPlugins
           # Create oVirt VM.
           attr = {
               :name     => hostname,
+              :description => config.description,
+              :comment => config.comment,
               :cpu      => {
                 :architecture => 'x86_64',
                 :topology => {
