@@ -47,6 +47,10 @@ module VagrantPlugins
         error_key(:remove_snapshot_error)
       end
 
+      class UpdateVolumeError < VagrantOVirtError
+        error_key(:resize_disk_error)
+      end
+
       class RemoveVMError < VagrantOVirtError
         error_key(:remove_vm_error)
       end

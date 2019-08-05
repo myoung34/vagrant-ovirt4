@@ -14,6 +14,8 @@ en:
       VM is currently powering up. Please run `vagrant halt` to abort or wait until its status is 'up'.
     wait_for_ready_vm: |-
       Waiting for VM to become "ready" to start...
+    wait_for_ready_volume: |-
+      Waiting for disk resize to finish...
     error_recovering: |-
       An error occured. Recovering..
     waiting_for_ip: |-
@@ -78,3 +80,5 @@ en:
         Snapshot with id %{id} is the active snapshot which cannot be removed.
       remove_snapshot_error: |-
         Snapshot with id %{id} Could not be removed. Details: %{error_message}.
+      resize_disk_error: |-
+        Disk resize failed. oVirt error message was '%{error_message}'

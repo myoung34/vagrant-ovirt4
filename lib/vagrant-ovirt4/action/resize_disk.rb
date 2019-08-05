@@ -24,35 +24,37 @@ module VagrantPlugins
 
           # Get machine first.
           begin
-            machine = OVirtProvider::Util::Collection.find_matching(
-              env[:ovirt_compute].servers.all, env[:machine].id.to_s)
+            vm_service = env[:vms_service].vm_service(env[:machine].id.to_s)
           rescue => e
             raise Errors::NoVMError, :vm_id => env[:machine].id
           end
 
+          disk_attachments_service = vm_service.disk_attachments_service
+          disk_attachments = disk_attachments_service.list
+          disk = disk_attachments.first.disk
+
           # Extend disk size if necessary
           begin
-            machine.update_volume(
-              :id      => machine.volumes.first.id,
-              :size    => config.disk_size*1024*1024*1024,
+            disk_attachment_service = disk_attachments_service.attachment_service(disk.id)
+            disk_attachment = disk_attachment_service.update(
+              OvirtSDK4::DiskAttachment.new(disk: {provisioned_size: config.disk_size})
             )
           rescue => e
             raise Errors::UpdateVolumeError,
               :error_message => e.message
           end
 
-          # Wait till all volumes are ready.
+          # Wait until resize operation has finished.
+          disks_service = env[:connection].system_service.disks_service
+          disk_service = disks_service.disk_service(disk.id)
           env[:ui].info(I18n.t("vagrant_ovirt4.wait_for_ready_volume"))
-          for i in 0..10
-            ready = true
-            machine = env[:ovirt_compute].servers.get(env[:machine].id.to_s)
-            machine.volumes.each do |volume|
-              if volume.status != 'ok'
-                ready = false
-                break
-              end
+          ready = false
+          for i in 0..120
+            disk = disk_service.get
+            if disk.status == OvirtSDK4::DiskStatus::OK
+              ready = true
+              break
             end
-            break if ready
             sleep 2
           end
 
