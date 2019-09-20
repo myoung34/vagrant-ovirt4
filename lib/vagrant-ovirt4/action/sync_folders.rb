@@ -19,6 +19,9 @@ module VagrantPlugins
             next if data[:disabled]
             hostpath  = File.expand_path(data[:hostpath], env[:root_path])
             guestpath = data[:guestpath]
+            if env[:machine].config.vm.guest = :windows
+              guestpath = guestpath.gsub(/^(\/)/, "/cygdrive/c/")
+            end
 
             # Make sure there is a trailing slash on the host path to avoid creating an additional directory with rsync
             hostpath = "#{hostpath}/" if hostpath !~ /\/$/
