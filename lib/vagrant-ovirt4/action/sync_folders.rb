@@ -19,7 +19,7 @@ module VagrantPlugins
             next if data[:disabled]
             hostpath  = File.expand_path(data[:hostpath], env[:root_path])
             guestpath = data[:guestpath]
-            if env[:machine].config.vm.guest = :windows
+            if env[:machine].config.vm.guest == :windows
               guestpath = guestpath.gsub(/^(\/)/, "/cygdrive/c/")
             end
 
