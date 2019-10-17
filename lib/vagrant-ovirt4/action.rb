@@ -39,6 +39,7 @@ module VagrantPlugins
             b2.use WaitTillUp
             b2.use SyncFolders
           end
+          b.use DisconnectOVirt
         end
       end
 
@@ -56,6 +57,7 @@ module VagrantPlugins
             b2.use HaltVM
             b2.use WaitTillDown
             b2.use DestroyVM
+            b2.use DisconnectOVirt
           end
         end
       end
@@ -82,6 +84,7 @@ module VagrantPlugins
           b.use ConfigValidate
           b.use ConnectOVirt
           b.use ReadState
+          b.use DisconnectOVirt
         end
       end
 
@@ -93,6 +96,7 @@ module VagrantPlugins
           b.use ConfigValidate
           b.use ConnectOVirt
           b.use ReadSSHInfo
+          b.use DisconnectOVirt
         end
       end
 
@@ -113,6 +117,7 @@ module VagrantPlugins
             raise Errors::NoIPError if env[:ip_address].nil?
             b2.use SSHExec
           end
+          b.use DisconnectOVirt
         end
       end
 
@@ -133,6 +138,7 @@ module VagrantPlugins
             raise Errors::NoIPError if env[:ip_address].nil?
             b2.use SSHRun
           end
+          b.use DisconnectOVirt
         end
       end
 
@@ -212,6 +218,7 @@ module VagrantPlugins
 
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
       autoload :ConnectOVirt, action_root.join("connect_ovirt")
+      autoload :DisconnectOVirt, action_root.join("disconnect_ovirt")
       autoload :CreateNetworkInterfaces, action_root.join("create_network_interfaces")
       autoload :CreateVM, action_root.join("create_vm")
       autoload :DestroyVM, action_root.join("destroy_vm")
@@ -250,6 +257,7 @@ module VagrantPlugins
             end
             yield env, b2
           end
+          b.use DisconnectOVirt
         end
       end
     end
