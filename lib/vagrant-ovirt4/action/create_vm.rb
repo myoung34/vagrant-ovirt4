@@ -30,6 +30,10 @@ module VagrantPlugins
           env[:ui].info(" -- Description:   #{config.description}")
           env[:ui].info(" -- Comment:       #{config.comment}")
           env[:ui].info(" -- Disk:          #{Filesize.from("#{config.disk_size} B").to_f('GB').to_i} GB") unless config.disk_size.nil?
+          env[:ui].info(" -- Additional Disks:") unless config.disks.empty?
+          config.disks.each do |disk|
+            env[:ui].info(" ---- name=#{disk[:name]} size=#{Filesize.from("#{disk[:size]} B").to_f('GB').to_i} GB")
+          end
           env[:ui].info(" -- Memory:        ")
           env[:ui].info(" ---- Memory:      #{Filesize.from("#{config.memory_size} B").to_f('MB').to_i} MB")
           env[:ui].info(" ---- Maximum:     #{Filesize.from("#{config.memory_maximum} B").to_f('MB').to_i} MB")
@@ -72,7 +76,7 @@ module VagrantPlugins
           }
 
           begin
-            server = env[:vms_service].add(attr) 
+            server = env[:vms_service].add(attr)
           rescue OvirtSDK4::Error => e
             fault_message = /Fault detail is \"\[?(.+?)\]?\".*/.match(e.message)[1] rescue e.message
             retry if e.message =~ /Related operation is currently in progress/
@@ -97,6 +101,9 @@ module VagrantPlugins
             disk_attachments = disk_attachments_service.list
             disk_attachments.each do |disk_attachment|
               disk = env[:connection].follow_link(disk_attachment.disk)
+              if config.debug
+                env[:ui].info("Checking disk status id=#{disk.id} name=#{disk.name} status=#{disk.status}")
+              end
               if disk.status != 'ok'
                 disk_ready = false
                 break
@@ -109,6 +116,44 @@ module VagrantPlugins
 
           if not ready
             raise Errors::WaitForReadyVmTimeout
+          end
+
+          # add storage disks
+          vm_service = env[:vms_service].vm_service(env[:machine].id)
+          disk_attachments_service = vm_service.disk_attachments_service
+          storage_disks = []
+          config.disks.each do |disk|
+            disk_attachment = disk_attachments_service.add(
+              OvirtSDK4::DiskAttachment.new(
+                disk: {
+                  name: disk[:name],
+                  description: '#{hostname} storage disk',
+                  format: disk[:type] == 'qcow2' ? OvirtSDK4::DiskFormat::COW : OvirtSDK4::DiskFormat::RAW,
+                  provisioned_size: disk[:size],
+                  storage_domains: [{
+                    name: disk[:storage_domain]
+                  }]
+                },
+                interface: disk[:bus] == 'virtio' ? OvirtSDK4::DiskInterface::VIRTIO : OvirtSDK4::DiskInterface::IDE,
+                bootable: false,
+                active: true
+              )
+            )
+            storage_disks << disk_attachment
+            env[:ui].info("Added storage disk id=#{disk_attachment.disk.id} name=#{disk[:name]} size=#{disk[:size]}")
+          end
+
+          disks_service = env[:connection].system_service.disks_service
+          storage_disks.each do |s_disk|
+            disk_service = disks_service.disk_service(s_disk.disk.id)
+            loop do
+              sleep(5)
+              disk = disk_service.get
+              if config.debug
+                env[:ui].info("Checking disk status id=#{disk.id} name=#{disk.name} status=#{disk.status}")
+              end
+              break if disk.status == OvirtSDK4::DiskStatus::OK
+            end
           end
 
           begin

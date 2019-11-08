@@ -56,7 +56,7 @@ $ vagrant up --provider=ovirt4
 ```
 Vagrant.configure("2") do |config|
   config.vm.box = 'ovirt4'
-  config.vm.hostname = "foo" 
+  config.vm.hostname = "foo"
   config.vm.box_url = 'https://github.com/myoung34/vagrant-ovirt4/blob/master/example_box/dummy.box?raw=true'
 
   config.vm.network :private_network,
@@ -90,6 +90,8 @@ write_files:
     permissions: '0644'
 EOF
 
+    # additional disks
+    ovirt.storage :file, size: "8 GiB", type: 'qcow2', storage_domain: "mystoragedomain"
   end
 end
 ```
@@ -124,12 +126,16 @@ end
   1. `placement_host` => The host to start the VM on. Optional.
   1. `bios_serial` => The BIOS serial number to assign. Optional.
   1. `optimized_for` => The "optimized for" setting. Can be one of 'Desktop' or 'Server' (case insensitive). Optional.
+  1. `storage` => adds a new storage disk to the VM
+    a. `size`: the size of the disk
+    a. `type`: the type of disk. It can be either `qcow2` or `raw`
+    a. `storage_domain`: the storage domain where the disk should be created
 
 
 ## Testing
 
 Currently pull-requests are tested via [test-kitchen using kitchen-vagrant](https://github.com/test-kitchen/kitchen-vagrant).
-See [Jenkinsfile](Jenkinsfile) for more information. 
+See [Jenkinsfile](Jenkinsfile) for more information.
 If you'd like to run them yourself, however, they make not work in all setups. For example they assume `192.168.2.0/24`, host pinning will probably not have a host that's in all set ups, and the template names might not match.
 
 To run Unit tests: `bundle install; bundle exec rspec`
