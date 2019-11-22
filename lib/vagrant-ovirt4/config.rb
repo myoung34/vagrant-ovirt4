@@ -29,6 +29,7 @@ module VagrantPlugins
       attr_accessor :optimized_for
       attr_accessor :description
       attr_accessor :comment
+      attr_accessor :disks
 
       def initialize
         @url               = UNSET_VALUE
@@ -54,7 +55,34 @@ module VagrantPlugins
         @optimized_for     = UNSET_VALUE
         @description       = UNSET_VALUE
         @comment           = UNSET_VALUE
+        @disks             = []
 
+      end
+
+      def storage(storage_type, options = {})
+        if storage_type == :file
+          _handle_disk_storage(options)
+        end
+      end
+
+      def _handle_disk_storage(options ={})
+        options = {
+          name: "storage_disk_#{@disks.length + 1}",
+          type: 'qcow2',
+          size: Filesize.from('8G').to_f('B').to_i,
+          bus: 'virtio'
+        }.merge(options)
+
+        disk = {
+          name: options[:name],
+          device: options[:device],
+          type: options[:type],
+          size: Filesize.from(options[:size]).to_f('B').to_i,
+          storage_domain: options[:storage_domain],
+          bus: options[:bus]
+        }
+
+        @disks << disk  # append
       end
 
       def finalize!
@@ -102,7 +130,7 @@ module VagrantPlugins
           @memory_size = Filesize.from(@memory_size).to_f('B').to_i
           @memory_maximum = Filesize.from(@memory_maximum).to_f('B').to_i
           @memory_guaranteed = Filesize.from(@memory_guaranteed).to_f('B').to_i
-        rescue ArgumentError 
+        rescue ArgumentError
           raise "Not able to parse either `memory_size` or `memory_guaranteed`. Please verify and check again."
         end
       end
