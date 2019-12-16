@@ -45,7 +45,7 @@ GEM
     domain_name (0.5.20170223)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
-    excon (0.55.0)
+    excon (0.71.0)
     faraday (0.11.0)
       multipart-post (>= 1.2, < 3)
     ffi (1.11.1)
