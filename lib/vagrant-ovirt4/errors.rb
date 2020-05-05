@@ -7,6 +7,10 @@ module VagrantPlugins
         error_namespace("vagrant_ovirt4.errors")
       end
 
+      class RsyncError < VagrantOVirtError
+        error_key(:rsync_error)
+      end
+
       class NoVMError < VagrantOVirtError
         error_key(:no_vm_error)
       end

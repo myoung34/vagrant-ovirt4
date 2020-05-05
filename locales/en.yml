@@ -60,6 +60,8 @@ en:
         Error removing VM '%{vm_name}'. oVirt error message was '%{error_message}'
       no_vm_error: |-
         No VM found with id '%{vm_id}'
+      rsync_error: |-
+        An rsync error occurred. oVirt error message was '%{error_message}'
       create_vm_error: |-
         Creation failed. oVirt error message was '%{error_message}'
       update_bios_error: |-
