@@ -46,9 +46,16 @@ module VagrantPlugins
           (0...configured_ifaces_options.length()).each do |iface_index|
             iface_options = configured_ifaces_options[iface_index]
 
+            if iface_options[:biosdevname] then
+              prefix = 'ens'
+              iface_index = iface_index + 3
+            else
+              prefix = 'eth'
+            end
+
             if iface_options[:ip] then
               nic_configuration = {
-                name: "eth#{iface_index}",
+                name: "#{prefix}#{iface_index}",
                 on_boot: true,
                 boot_protocol: OvirtSDK4::BootProtocol::STATIC,
                 ip: {
@@ -60,7 +67,7 @@ module VagrantPlugins
               }
             else
               nic_configuration = {
-                name: "eth#{iface_index}",
+                name: "#{prefix}#{iface_index}",
                 on_boot: true,
                 boot_protocol: OvirtSDK4::BootProtocol::DHCP,
               }

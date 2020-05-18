@@ -63,6 +63,8 @@ Vagrant.configure("2") do |config|
     :ovirt__network_name => 'ovirtmgmt' #DHCP
     # Static configuration
     #:ovirt__ip => '192.168.2.198', :ovirt__network_name => 'ovirtmgmt', :ovirt__gateway => '192.168.2.125', :ovirt__netmask => '255.255.0.0', :ovirt__dns_servers => '192.168.2.1', :ovirt__dns_search => 'test.local'
+    # Static configuration with biosdevname naming interfaces in format ensX, where X starts from 3
+    #:ovirt__ip => '192.168.2.198', :ovirt__network_name => 'ovirtmgmt', :ovirt__gateway => '192.168.2.125', :ovirt__netmask => '255.255.0.0', :ovirt__dns_servers => '192.168.2.1', :ovirt__dns_search => 'test.local', :ovirt__biosdevname => true
 
   config.vm.provider :ovirt4 do |ovirt|
     ovirt.url = 'https://server/ovirt-engine/api'
