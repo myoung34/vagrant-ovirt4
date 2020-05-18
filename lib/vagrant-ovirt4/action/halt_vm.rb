@@ -12,6 +12,13 @@ module VagrantPlugins
         def call(env)
           env[:ui].info(I18n.t("vagrant_ovirt4.halt_vm"))
 
+          # Halt via OS capability
+          if env[:machine].guest.capability?(:halt)
+            env[:machine].guest.capability(:halt)
+          end
+          # Give the VM a chance to shutdown gracefully..."
+          sleep 10
+
           machine = env[:vms_service].vm_service(env[:machine].id)
           machine.stop rescue nil #todo dont rescue
 
