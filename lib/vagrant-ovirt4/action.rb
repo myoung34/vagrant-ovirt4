@@ -13,6 +13,8 @@ module VagrantPlugins
           b.use ConfigValidate
           b.use ConnectOVirt
           b.use Call, ReadState do |env, b2|
+            # synced_folders defaults to NFS on linux. Make it default to rsync as before.
+            env[:machine].config.nfs.functional = false
             if env[:machine_state_id] == :up
               b2.use SyncedFolderCleanup
               b2.use SyncedFolders
@@ -68,6 +70,8 @@ module VagrantPlugins
         Vagrant::Action::Builder.new.tap do |b|
           b.use ConfigValidate
           b.use Call, IsCreated do |env, b2|
+            # synced_folders defaults to NFS on linux. Make it default to rsync as before.
+            env[:machine].config.nfs.functional = false
             if !env[:result]
               b2.use MessageNotCreated
               next
