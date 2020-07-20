@@ -63,8 +63,12 @@ Vagrant.configure("2") do |config|
     :ovirt__network_name => 'ovirtmgmt' #DHCP
     # Static configuration
     #:ovirt__ip => '192.168.2.198', :ovirt__network_name => 'ovirtmgmt', :ovirt__gateway => '192.168.2.125', :ovirt__netmask => '255.255.0.0', :ovirt__dns_servers => '192.168.2.1', :ovirt__dns_search => 'test.local'
-    # Static configuration with biosdevname naming interfaces in format ensX, where X starts from 3
-    #:ovirt__ip => '192.168.2.198', :ovirt__network_name => 'ovirtmgmt', :ovirt__gateway => '192.168.2.125', :ovirt__netmask => '255.255.0.0', :ovirt__dns_servers => '192.168.2.1', :ovirt__dns_search => 'test.local', :ovirt__biosdevname => true
+    # Static configuration with biosdevname. Guest OS assigns interface names (ens3, em1 or something else). ovirt__interface_name has to match that name.
+    #:ovirt__ip => '192.168.2.198', :ovirt__network_name => 'ovirtmgmt', :ovirt__gateway => '192.168.2.125', :ovirt__netmask => '255.255.0.0', :ovirt__dns_servers => '192.168.2.1', :ovirt__dns_search => 'test.local', :ovirt__interface_name => 'ens3'
+
+#  configure additional interface
+#  config.vm.network :private_network,
+#    :ovirt__ip => '192.168.2.199', :ovirt__network_name => 'ovirtmgmt', :ovirt__netmask => '255.255.0.0', :ovirt__interface_name => 'ens4'
 
   config.vm.provider :ovirt4 do |ovirt|
     ovirt.url = 'https://server/ovirt-engine/api'
