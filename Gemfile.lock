@@ -14,9 +14,10 @@ GEM
     filesize (0.2.0)
     json (2.3.0)
     method_source (1.0.0)
-    mini_portile2 (2.4.0)
-    nokogiri (1.10.9)
-      mini_portile2 (~> 2.4.0)
+    mini_portile2 (2.5.0)
+    nokogiri (1.11.0)
+      mini_portile2 (~> 2.5.0)
+      racc (~> 1.4)
     ovirt-engine-sdk (4.0.12)
       json
     pry (0.13.1)
@@ -25,6 +26,7 @@ GEM
     pry-byebug (3.9.0)
       byebug (~> 11.0)
       pry (~> 0.13.0)
+    racc (1.5.2)
 
 PLATFORMS
   ruby
