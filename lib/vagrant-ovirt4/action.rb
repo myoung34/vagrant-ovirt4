@@ -58,8 +58,8 @@ module VagrantPlugins
 
             b2.use ConnectOVirt
             b2.use ProvisionerCleanup, :before if defined?(ProvisionerCleanup)
-            b2.use HaltVM
-            b2.use WaitTillDown
+            b2.use HaltVM unless env[:machine].state.id == :down
+            b2.use WaitTillDown unless env[:machine].state.id == :down
             b2.use DestroyVM
             b2.use DisconnectOVirt
           end
