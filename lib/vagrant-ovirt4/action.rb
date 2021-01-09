@@ -201,7 +201,8 @@ module VagrantPlugins
             b.use MessageNotSuspended
             next
           end
-          b.use action_up
+          b.use StartVM
+          b.use WaitTillUp
         end
       end
 
