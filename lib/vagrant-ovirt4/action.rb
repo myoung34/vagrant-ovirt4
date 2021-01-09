@@ -168,7 +168,7 @@ module VagrantPlugins
       end
 
       def self.action_reload
-        with_ovirt do |env, b|
+        Vagrant::Action::Builder.new.tap do |b|
           b.use action_halt
           b.use action_up
         end
