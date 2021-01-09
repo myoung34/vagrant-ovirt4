@@ -29,15 +29,15 @@ module VagrantPlugins
           env[:ui].info(" -- Optimized For: #{config.optimized_for}")
           env[:ui].info(" -- Description:   #{config.description}")
           env[:ui].info(" -- Comment:       #{config.comment}")
-          env[:ui].info(" -- Disk:          #{Filesize.from("#{config.disk_size} B").to_f('GB').to_i} GB") unless config.disk_size.nil?
+          env[:ui].info(" -- Disk:          #{Filesize.from("#{config.disk_size} B").to_f('GiB').to_i} GiB") unless config.disk_size.nil?
           env[:ui].info(" -- Additional Disks:") unless config.disks.empty?
           config.disks.each do |disk|
-            env[:ui].info(" ---- name=#{disk[:name]} size=#{Filesize.from("#{disk[:size]} B").to_f('GB').to_i} GB")
+            env[:ui].info(" ---- name=#{disk[:name]} size=#{Filesize.from("#{disk[:size]} B").to_f('GiB').to_i} GiB")
           end
           env[:ui].info(" -- Memory:        ")
-          env[:ui].info(" ---- Memory:      #{Filesize.from("#{config.memory_size} B").to_f('MB').to_i} MB")
-          env[:ui].info(" ---- Maximum:     #{Filesize.from("#{config.memory_maximum} B").to_f('MB').to_i} MB")
-          env[:ui].info(" ---- Guaranteed:  #{Filesize.from("#{config.memory_guaranteed} B").to_f('MB').to_i} MB")
+          env[:ui].info(" ---- Memory:      #{Filesize.from("#{config.memory_size} B").to_f('MiB').to_i} MiB")
+          env[:ui].info(" ---- Maximum:     #{Filesize.from("#{config.memory_maximum} B").to_f('MiB').to_i} MiB")
+          env[:ui].info(" ---- Guaranteed:  #{Filesize.from("#{config.memory_guaranteed} B").to_f('MiB').to_i} MiB")
           env[:ui].info(" -- Cpu:           ")
           env[:ui].info(" ---- Cores:       #{config.cpu_cores}")
           env[:ui].info(" ---- Sockets:     #{config.cpu_sockets}")

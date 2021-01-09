@@ -68,13 +68,13 @@ describe VagrantPlugins::OVirtProvider::Config do
     [:memory_size, :memory_maximum, :memory_guaranteed].each do |attribute|
 
       it "should not default #{attribute} if overridden" do
-        instance.send("#{attribute}=".to_sym, "512 MB")
+        instance.send("#{attribute}=".to_sym, "512 MiB")
         instance.finalize!
         instance.send(attribute).should == 512000000
       end
 
       it "should convert the value" do
-        instance.send("#{attribute}=".to_sym, "1 GB")
+        instance.send("#{attribute}=".to_sym, "1 GiB")
         instance.finalize!
         instance.send(attribute).should == 1000000000
       end
