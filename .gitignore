@@ -6,5 +6,4 @@
 /.idea
 *.gem
 /manifests
-hiera.yaml
-.kitchen
+vendor

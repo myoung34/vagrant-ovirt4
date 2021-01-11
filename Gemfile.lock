@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    vagrant-ovirt4 (1.2.3)
+    vagrant-ovirt4 (2.0.0)
       filesize (~> 0)
       nokogiri (>= 1.10.8)
       ovirt-engine-sdk (~> 4.0.1)
@@ -12,10 +12,10 @@ GEM
     byebug (11.1.3)
     coderay (1.1.2)
     filesize (0.2.0)
-    json (2.3.0)
+    json (2.5.1)
     method_source (1.0.0)
     mini_portile2 (2.5.0)
-    nokogiri (1.11.0)
+    nokogiri (1.11.1)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
     ovirt-engine-sdk (4.0.12)
@@ -27,6 +27,12 @@ GEM
       byebug (~> 11.0)
       pry (~> 0.13.0)
     racc (1.5.2)
+    rake (13.0.3)
+    rake-release (1.2.1)
+      bundler (>= 1.11, < 3)
+    rspec-core (3.10.1)
+      rspec-support (~> 3.10.0)
+    rspec-support (3.10.1)
 
 PLATFORMS
   ruby
@@ -35,6 +41,9 @@ DEPENDENCIES
   byebug
   pry
   pry-byebug
+  rake
+  rake-release
+  rspec-core
   vagrant-ovirt4!
 
 BUNDLED WITH
