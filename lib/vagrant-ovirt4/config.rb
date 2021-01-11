@@ -98,7 +98,7 @@ module VagrantPlugins
         @cpu_threads = 1 if @cpu_threads == UNSET_VALUE
         @cluster = nil if @cluster == UNSET_VALUE
         @console = nil if @console == UNSET_VALUE
-        @memory_size = '256 MB' if @memory_size == UNSET_VALUE
+        @memory_size = '256 MiB' if @memory_size == UNSET_VALUE
         @memory_maximum = @memory_size if @memory_maximum == UNSET_VALUE
         @memory_guaranteed = @memory_size if @memory_guaranteed == UNSET_VALUE
         @template = nil if @template == UNSET_VALUE
