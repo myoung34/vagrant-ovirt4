@@ -1,0 +1,20 @@
+v2.0.0
+
+1810832 Attempt to fix gem push
+9d1ef6b handle fallback with rescue
+6cc0f90 fix for backwards compatibility with ovirt 4.3
+2298314 Make no assumptions on biosdevname/systemd device naming
+1d870df Support for network interfaces named by biosdevname
+5c8035a add missing translation
+f9b6e28 fixed double disconnect due to action_up used in combination wth with_ovirt
+96f17c0 fixed doule disconnect on reload due to use of with_ovirt
+697e3d4 fixed inconsistent usages of memory units (MB/MiB and GB/GiB)
+5a68e8b vagrant destroy only calls halt if vm is up
+8772ee9 fix for erroneous rsync and state error due to missing ip address
+5b49114 Bump nokogiri from 1.10.9 to 1.11.0
+b8314fb fix for waiting indefinitely for an ip when deploying on ovirt 4.4
+722f2e0 Default to rsync instead of NFS like before
+2582f53 Use vagrant builtin rsync folder sync
+84c6c53 In case graceful shutdown failed, fallback to stopping VM immediately
+640d640 Fix up dependencies
+029b53b give guests a chance to shutdown gracefully before pulling the plug with a poweroff
