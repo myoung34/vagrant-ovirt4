@@ -55,6 +55,10 @@ en:
         The instance is not running. Use `vagrant up` to start it.
       short_down: |-
         down
+      long_not_created: |-
+        The instance is not created. Use `vagrant up` to create it.
+      short_not_created: |-
+        not created
     errors:
       remove_vm_error: |-
         Error removing VM '%{vm_name}'. oVirt error message was '%{error_message}'
