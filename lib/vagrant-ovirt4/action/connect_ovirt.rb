@@ -34,8 +34,9 @@ module VagrantPlugins
 
           begin
             ovirt_connection.test(true, 30)
-          rescue
-            raise Errors::ServiceConnectionError, 'oVirt connection failed.'
+          rescue => error
+            raise Errors::ServiceConnectionError,
+              :error_message => error.message
           else
             env[:connection] = ovirt_connection
             env[:vms_service] = vms_service

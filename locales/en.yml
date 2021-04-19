@@ -61,7 +61,7 @@ en:
         not created
     errors:
       service_connection_error: |-
-        "Error connecting to the oVirt cluster: '%{error_message}'"
+        Error connecting to the oVirt cluster endpoint: "%{error_message}"
       remove_vm_error: |-
         Error removing VM '%{vm_name}'. oVirt error message was '%{error_message}'
       no_vm_error: |-

@@ -16,8 +16,8 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = VagrantPlugins::OVirtProvider::VERSION
 
-  gem.add_runtime_dependency 'ovirt-engine-sdk', '~> 4.0.1'
+  gem.add_runtime_dependency 'ovirt-engine-sdk', '~> 4'
   gem.add_runtime_dependency 'filesize', '~> 0'
-  gem.add_runtime_dependency 'nokogiri', '>= 1.10.8'
+  gem.add_runtime_dependency 'nokogiri', '~> 1'
 
 end
