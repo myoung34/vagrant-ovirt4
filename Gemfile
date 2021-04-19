@@ -4,6 +4,7 @@ group :development do
   gem 'rake'
   gem 'rspec-core'
   gem 'rspec-its'
+  gem "rspec-mocks", "~> 3.5"
   gem 'pry'
   gem 'byebug'
   gem 'pry-byebug'
@@ -14,5 +15,3 @@ end
 group :plugins do
   gem 'vagrant-ovirt4', :path => '.'
 end
-
-gem "rspec-mocks", "~> 3.5"
