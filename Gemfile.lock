@@ -1,15 +1,4 @@
 GIT
-  remote: https://github.com/hashicorp/vagrant-spec.git
-  revision: 9057cd6e0ac299688da608d459deac66bfad8880
-  branch: main
-  specs:
-    vagrant-spec (0.0.1)
-      childprocess
-      log4r (~> 1.1.9)
-      rspec (~> 3.5.0)
-      thor (~> 0.18.1)
-
-GIT
   remote: https://github.com/hashicorp/vagrant.git
   revision: 22795b161bf67a4c0ebbe32c9ce8777cb888c4a7
   specs:
@@ -117,10 +106,6 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rspec (3.5.0)
-      rspec-core (~> 3.5.0)
-      rspec-expectations (~> 3.5.0)
-      rspec-mocks (~> 3.5.0)
     rspec-core (3.5.4)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
@@ -136,7 +121,6 @@ GEM
     ruby_dep (1.3.1)
     rubyntlm (0.6.3)
     rubyzip (2.3.0)
-    thor (0.18.1)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.7)
@@ -173,9 +157,9 @@ DEPENDENCIES
   rake-release
   rspec-core
   rspec-its
+  rspec-mocks (~> 3.5)
   vagrant!
   vagrant-ovirt4!
-  vagrant-spec!
 
 BUNDLED WITH
    1.17.2

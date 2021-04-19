@@ -9,9 +9,10 @@ group :development do
   gem 'pry-byebug'
   gem 'rake-release'
   gem "vagrant", git: "https://github.com/hashicorp/vagrant.git"
-  gem 'vagrant-spec', :git => "https://github.com/hashicorp/vagrant-spec.git", :branch => 'main'
 end
 
 group :plugins do
   gem 'vagrant-ovirt4', :path => '.'
 end
+
+gem "rspec-mocks", "~> 3.5"
