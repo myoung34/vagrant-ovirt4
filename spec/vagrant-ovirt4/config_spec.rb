@@ -40,9 +40,9 @@ describe VagrantPlugins::OVirtProvider::Config do
     its("cluster")           { should be_nil }
     its("console")           { should be_nil }
     its("template")          { should be_nil }
-    its("memory_size")       { should == 256000000 }
-    its("memory_maximum")    { should == 256000000 }
-    its("memory_guaranteed") { should == 256000000 }
+    its("memory_size")       { should == 268435456 }
+    its("memory_maximum")    { should == 268435456 }
+    its("memory_guaranteed") { should == 268435456 }
     its("cloud_init")        { should be_nil }
     its("affinity")          { should be_nil }
     its("placement_host")    { should be_nil }
@@ -54,12 +54,31 @@ describe VagrantPlugins::OVirtProvider::Config do
   end
 
   describe "overriding defaults" do
-    [:url, :username, :password, :insecure, :debug, :filtered_api, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :cloud_init, :placement_host, :bios_serial, :optimized_for, :description, :comment].each do |attribute|
+    [:url, :username, :password, :insecure, :debug, :filtered_api, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :cloud_init, :placement_host, :bios_serial, :description, :comment].each do |attribute|
 
       it "should not default #{attribute} if overridden" do
         instance.send("#{attribute}=".to_sym, "foo")
         instance.finalize!
         instance.send(attribute).should == "foo"
+      end
+    end
+  end
+
+  describe "overriding optimized_for" do
+    [:optimized_for].each do |attribute|
+      ['server', 'desktop'].each do |value|
+        it "should accept #{value} for #{attribute}" do
+          instance.send("#{attribute}=".to_sym, value)
+          instance.finalize!
+          instance.send(attribute).should == value
+        end
+      end
+
+      it "should reject a value for #{attribute} outside of the defined values" do
+        expect {
+          instance.send("#{attribute}=".to_sym, "foo")
+          instance.finalize!
+        }.to raise_error(RuntimeError)
       end
     end
   end
@@ -70,13 +89,13 @@ describe VagrantPlugins::OVirtProvider::Config do
       it "should not default #{attribute} if overridden" do
         instance.send("#{attribute}=".to_sym, "512 MiB")
         instance.finalize!
-        instance.send(attribute).should == 512000000
+        instance.send(attribute).should == 536870912
       end
 
       it "should convert the value" do
         instance.send("#{attribute}=".to_sym, "1 GiB")
         instance.finalize!
-        instance.send(attribute).should == 1000000000
+        instance.send(attribute).should == 1073741824
       end
 
     end
@@ -106,4 +125,5 @@ describe VagrantPlugins::OVirtProvider::Config do
 
     end
   end
+
 end
