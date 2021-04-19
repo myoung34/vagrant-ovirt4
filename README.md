@@ -145,3 +145,10 @@ end
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+Some pointers:
+
+* To install the requirements when developing:
+    * `bundle install`
+* To run the test suite:
+    * `bundle exec rspec spec/`

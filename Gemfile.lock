@@ -1,3 +1,41 @@
+GIT
+  remote: https://github.com/hashicorp/vagrant-spec.git
+  revision: 9057cd6e0ac299688da608d459deac66bfad8880
+  branch: main
+  specs:
+    vagrant-spec (0.0.1)
+      childprocess
+      log4r (~> 1.1.9)
+      rspec (~> 3.5.0)
+      thor (~> 0.18.1)
+
+GIT
+  remote: https://github.com/hashicorp/vagrant.git
+  revision: 22795b161bf67a4c0ebbe32c9ce8777cb888c4a7
+  specs:
+    vagrant (2.2.11.dev)
+      bcrypt_pbkdf (~> 1.0.0)
+      childprocess (~> 4.0.0)
+      ed25519 (~> 1.2.4)
+      erubi
+      hashicorp-checkpoint (~> 0.1.5)
+      i18n (~> 1.8)
+      listen (~> 3.1)
+      log4r (~> 1.1.9, < 1.1.11)
+      mime (~> 0.4.4)
+      net-scp (~> 1.2.0)
+      net-sftp (~> 3.0)
+      net-ssh (~> 6.0)
+      rb-kqueue (~> 0.2.0)
+      rest-client (>= 1.6.0, < 3.0)
+      ruby_dep (<= 1.3.1)
+      rubyzip (~> 2.0)
+      vagrant_cloud (~> 2.0.3)
+      wdm (~> 0.1.0)
+      winrm (>= 2.3.4, < 3.0)
+      winrm-elevated (>= 1.2.1, < 2.0)
+      winrm-fs (>= 1.3.4, < 2.0)
+
 PATH
   remote: .
   specs:
@@ -9,30 +47,120 @@ PATH
 GEM
   remote: http://rubygems.org/
   specs:
+    bcrypt_pbkdf (1.0.1)
+    builder (3.2.4)
     byebug (11.1.3)
-    coderay (1.1.2)
+    childprocess (4.0.0)
+    coderay (1.1.3)
+    concurrent-ruby (1.1.8)
+    diff-lcs (1.4.4)
+    domain_name (0.5.20190701)
+      unf (>= 0.0.5, < 1.0.0)
+    ed25519 (1.2.4)
+    erubi (1.10.0)
+    ffi (1.15.0)
     filesize (0.2.0)
+    gssapi (1.3.1)
+      ffi (>= 1.0.1)
+    gyoku (1.3.1)
+      builder (>= 2.1.2)
+    hashicorp-checkpoint (0.1.5)
+    http-cookie (1.0.3)
+      domain_name (~> 0.5)
+    httpclient (2.8.3)
+    i18n (1.8.10)
+      concurrent-ruby (~> 1.0)
     json (2.5.1)
+    listen (3.5.1)
+      rb-fsevent (~> 0.10, >= 0.10.3)
+      rb-inotify (~> 0.9, >= 0.9.10)
+    little-plugger (1.1.4)
+    log4r (1.1.10)
+    logging (2.3.0)
+      little-plugger (~> 1.1)
+      multi_json (~> 1.14)
     method_source (1.0.0)
+    mime (0.4.4)
+    mime-types (3.3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2021.0225)
     mini_portile2 (2.5.0)
-    nokogiri (1.11.1)
+    multi_json (1.15.0)
+    net-scp (1.2.1)
+      net-ssh (>= 2.6.5)
+    net-sftp (3.0.0)
+      net-ssh (>= 5.0.0, < 7.0.0)
+    net-ssh (6.1.0)
+    netrc (0.11.0)
+    nokogiri (1.11.3)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
+    nori (2.6.0)
     ovirt-engine-sdk (4.0.12)
       json
-    pry (0.13.1)
+    pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    pry-byebug (3.9.0)
+    pry-byebug (3.8.0)
       byebug (~> 11.0)
-      pry (~> 0.13.0)
+      pry (~> 0.10)
     racc (1.5.2)
     rake (13.0.3)
-    rake-release (1.2.1)
+    rake-release (1.3.0)
       bundler (>= 1.11, < 3)
-    rspec-core (3.10.1)
-      rspec-support (~> 3.10.0)
-    rspec-support (3.10.1)
+    rb-fsevent (0.10.4)
+    rb-inotify (0.10.1)
+      ffi (~> 1.0)
+    rb-kqueue (0.2.6)
+      ffi (>= 0.5.0)
+    rest-client (2.0.2)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+    rspec-core (3.5.4)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-its (1.3.0)
+      rspec-core (>= 3.0.0)
+      rspec-expectations (>= 3.0.0)
+    rspec-mocks (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
+    ruby_dep (1.3.1)
+    rubyntlm (0.6.3)
+    rubyzip (2.3.0)
+    thor (0.18.1)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.7)
+    vagrant_cloud (2.0.3)
+      rest-client (~> 2.0.2)
+    wdm (0.1.1)
+    winrm (2.3.6)
+      builder (>= 2.1.2)
+      erubi (~> 1.8)
+      gssapi (~> 1.2)
+      gyoku (~> 1.0)
+      httpclient (~> 2.2, >= 2.2.0.2)
+      logging (>= 1.6.1, < 3.0)
+      nori (~> 2.0)
+      rubyntlm (~> 0.6.0, >= 0.6.3)
+    winrm-elevated (1.2.3)
+      erubi (~> 1.8)
+      winrm (~> 2.0)
+      winrm-fs (~> 1.0)
+    winrm-fs (1.3.5)
+      erubi (~> 1.8)
+      logging (>= 1.6.1, < 3.0)
+      rubyzip (~> 2.0)
+      winrm (~> 2.0)
 
 PLATFORMS
   ruby
@@ -44,7 +172,10 @@ DEPENDENCIES
   rake
   rake-release
   rspec-core
+  rspec-its
+  vagrant!
   vagrant-ovirt4!
+  vagrant-spec!
 
 BUNDLED WITH
    1.17.2
