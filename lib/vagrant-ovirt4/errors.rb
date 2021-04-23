@@ -7,6 +7,10 @@ module VagrantPlugins
         error_namespace("vagrant_ovirt4.errors")
       end
 
+      class ServiceConnectionError < VagrantOVirtError
+        error_key(:service_connection_error)
+      end
+
       class RsyncError < VagrantOVirtError
         error_key(:rsync_error)
       end

@@ -24,12 +24,24 @@ module VagrantPlugins
           conn_attr[:headers] = {'Filter' => true} if config.filtered_api
 
           @logger.info("Connecting to oVirt (#{config.url}) ...")
-          OVirtProvider.ovirt_connection = OvirtSDK4::Connection.new(conn_attr)          
-          OVirtProvider.vms_service = OVirtProvider.ovirt_connection.system_service.vms_service
-          env[:connection] = OVirtProvider.ovirt_connection
-          env[:vms_service] = OVirtProvider.vms_service
+          ovirt_connection = OvirtSDK4::Connection.new(conn_attr)
+          vms_service = ovirt_connection.system_service.vms_service
 
-          @app.call(env)
+          # XXX: Continue setting deprecated global properties. Use of the
+          # related values from env should be preferred.
+          OVirtProvider.ovirt_connection = ovirt_connection
+          OVirtProvider.vms_service = vms_service
+
+          begin
+            ovirt_connection.test(true, 30)
+          rescue => error
+            raise Errors::ServiceConnectionError,
+              :error_message => error.message
+          else
+            env[:connection] = ovirt_connection
+            env[:vms_service] = vms_service
+            @app.call(env)
+          end
         end
 
       end

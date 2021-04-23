@@ -1,3 +1,4 @@
+require 'log4r'
 require 'pathname'
 require 'vagrant-ovirt4/plugin'
 
@@ -8,9 +9,11 @@ module VagrantPlugins
     autoload :Errors, lib_path.join("errors")
     autoload :Util,   lib_path.join("util")
 
+    @@logger = Log4r::Logger.new("vagrant_ovirt4::provider")
     @@ovirt_connection = nil
     @@vms_service = nil
     def self.ovirt_connection
+      @@logger.warn('Use of deprecated OVirtProvider.ovirt_connection detected.')
       @@ovirt_connection
     end
 
@@ -19,6 +22,7 @@ module VagrantPlugins
     end
 
     def self.vms_service
+      @@logger.warn('Use of deprecated OVirtProvider.vms_service detected.')
       @@vms_service
     end
 
