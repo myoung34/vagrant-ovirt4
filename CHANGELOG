@@ -1,3 +1,14 @@
+v2.1.0
+41b8c63 Move where rspec-mocks is included.
+0015c45 Update engine binding.
+b2a0015 Not actually using the vagrant-spec thing.
+a598043 Address the change in parsing.
+0ad3b72 Get the tests runnable.
+a8f1d5f Test the connection before passing it on for use.
+8adf277 list only snapshots for vm's defined in the environment
+a2ee89b Add security.md
+3399aab Add CHANGELOG
+
 v2.0.0
 
 1810832 Attempt to fix gem push
