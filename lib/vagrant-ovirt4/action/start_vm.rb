@@ -81,6 +81,7 @@ module VagrantPlugins
           vm_configuration = {
             initialization: initialization,
             placement_policy: {},
+            run_once: false,
           }
 
           vm_configuration[:placement_policy][:hosts] = [{ :name => config.placement_host }] unless config.placement_host.nil?
