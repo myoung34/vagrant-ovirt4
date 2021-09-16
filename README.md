@@ -1,3 +1,5 @@
+[OvirtSDK4::Connection#initialize]: https://rubydoc.info/gems/ovirt-engine-sdk/OvirtSDK4%2FConnection:initialize
+
 # Vagrant oVirt v4 Provider
 
 This is a [Vagrant](http://www.vagrantup.com) 1.1+ plugin that adds an
@@ -76,6 +78,8 @@ Vagrant.configure("2") do |config|
     ovirt.password = "password"
     ovirt.insecure = true
     ovirt.debug = true
+    ovirt.timeout = 120 # seconds
+    ovirt.connect_timeout = 30 # seconds
     ovirt.filtered_api = true #see http://www.ovirt.org/develop/release-management/features/infra/user-portal-permissions/
     ovirt.cluster = 'Default'
     ovirt.vmname = 'my-vm'
@@ -120,6 +124,15 @@ end
   1. `password` => The password for the API. Required. String. No default value.
   1. `insecure` => Allow connecting to SSL sites without certificates. Optional. Bool. Default is `false`
   1. `debug` => Turn on additional log statements. Optional. Bool. Default is `false`.
+  1. `timeout` => Per [the oVirt SDK docs][OvirtSDK4::Connection#initialize],
+     "The maximun (_sic_) total time to wait for the response, in seconds. A value of
+     zero (the default) means wait for ever." Optional. Integer. Uses the
+     `OvirtSDK4::Connection` default if omitted; as of the time of writing,
+     this is `0` (i.e. wait forever).
+  1. `connect_timeout` => Per [the oVirt SDK docs][OvirtSDK4::Connection#initialize],
+     "The maximun (_sic_) time to wait for connection establishment, in
+     seconds." Optional. Integer. Uses the `OvirtSDK4::Connection` default if
+     omitted; as of the time of writing, this is `300`.
   1. `vmname` => Sets the name of the VM. Optional. String. Default is
      `config.vm.hostname`, if defined, otherwise `"vagrant"`.
     a. Is the 'name' in the Virtual Machine tab of the UI

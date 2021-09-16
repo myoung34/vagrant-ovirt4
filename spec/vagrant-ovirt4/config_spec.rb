@@ -125,4 +125,34 @@ describe VagrantPlugins::OVirtProvider::Config do
 
   end
 
+  describe "overriding timeout defaults" do
+    [:timeout, :connect_timeout].each do |attribute|
+      [0, 6, 1_000_000, 8.10, nil].each do |value|
+        it "should accept #{value.to_s} for #{attribute}" do
+          instance.send("#{attribute}=".to_sym, value)
+          instance.finalize!
+
+          if value.nil?
+            instance.send(attribute).should be_nil
+          else
+            instance.send(attribute).should == Integer(value)
+          end
+        end
+      end
+
+      ["foo", Object.new, -100].each do |value|
+        it "should reject a value for #{attribute} outside of the defined values" do
+          expect {
+            instance.send("#{attribute}=".to_sym, value)
+            instance.finalize!
+          }.to raise_error { |error|
+            expect(error).to be_a(RuntimeError)
+            expect(error.message).to match(/nonnegative integer/)
+          }
+        end
+      end
+    end
+
+  end
+
 end

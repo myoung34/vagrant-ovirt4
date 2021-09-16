@@ -31,6 +31,8 @@ module VagrantPlugins
       attr_accessor :comment
       attr_accessor :vmname
       attr_accessor :disks
+      attr_accessor :timeout
+      attr_accessor :connect_timeout
 
       def initialize
         @url               = UNSET_VALUE
@@ -57,6 +59,8 @@ module VagrantPlugins
         @description       = UNSET_VALUE
         @comment           = UNSET_VALUE
         @vmname            = UNSET_VALUE
+        @timeout           = UNSET_VALUE
+        @connect_timeout   = UNSET_VALUE
         @disks             = []
 
       end
@@ -112,6 +116,8 @@ module VagrantPlugins
         @description = '' if @description == UNSET_VALUE
         @comment = '' if @comment == UNSET_VALUE
         @vmname = nil if @vmname == UNSET_VALUE
+        @timeout = nil if @timeout == UNSET_VALUE
+        @connect_timeout = nil if @connect_timeout == UNSET_VALUE
 
         unless optimized_for.nil?
           raise "Invalid 'optimized_for'. Must be one of #{OvirtSDK4::VmType.constants.map { |s| "'#{s.downcase}'" }.join(' ')}" unless OvirtSDK4::VmType.constants.include? optimized_for.upcase.to_sym
@@ -135,6 +141,24 @@ module VagrantPlugins
           @memory_guaranteed = Filesize.from(@memory_guaranteed).to_f('B').to_i
         rescue ArgumentError
           raise "Not able to parse either `memory_size` or `memory_guaranteed`. Please verify and check again."
+        end
+
+        unless timeout.nil?
+          begin
+            @timeout = Integer(@timeout)
+            raise ArgumentError if @timeout < 0
+          rescue ArgumentError, TypeError
+            raise "`timeout` argument #{@timeout.inspect} is not a valid nonnegative integer"
+          end
+        end
+
+        unless connect_timeout.nil?
+          begin
+            @connect_timeout = Integer(@connect_timeout)
+            raise ArgumentError if @connect_timeout < 0
+          rescue ArgumentError, TypeError
+            raise "`connect_timeout` argument #{@connect_timeout.inspect} is not a valid nonnegative integer"
+          end
         end
       end
 
