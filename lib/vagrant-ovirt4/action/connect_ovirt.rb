@@ -22,6 +22,8 @@ module VagrantPlugins
           conn_attr[:debug] = config.debug if config.debug
           conn_attr[:insecure] = true if config.insecure
           conn_attr[:headers] = {'Filter' => true} if config.filtered_api
+          conn_attr[:timeout] = config.timeout unless config.timeout.nil?
+          conn_attr[:connect_timeout] = config.connect_timeout unless config.connect_timeout.nil?
 
           @logger.info("Connecting to oVirt (#{config.url}) ...")
           ovirt_connection = OvirtSDK4::Connection.new(conn_attr)
