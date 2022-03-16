@@ -123,7 +123,9 @@ end
   1. `username` => The username for the API. Required. String. No default value.
   1. `password` => The password for the API. Required. String. No default value.
   1. `insecure` => Allow connecting to SSL sites without certificates. Optional. Bool. Default is `false`
-  1. `debug` => Turn on additional log statements. Optional. Bool. Default is `false`.
+  1. `debug` => Turn on additional log statements. Optional. Bool. Default is
+     `true` if Vagrant's logging verbosity is set to `info` or above
+     (`VAGRANT_LOG={info,debug,...}`); otherwise, the default is `false`.
   1. `timeout` => Per [the oVirt SDK docs][OvirtSDK4::Connection#initialize],
      "The maximun (_sic_) total time to wait for the response, in seconds. A value of
      zero (the default) means wait for ever." Optional. Integer. Uses the
