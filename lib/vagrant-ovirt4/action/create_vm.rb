@@ -1,4 +1,5 @@
 require 'log4r'
+require 'vagrant-ovirt4/util/connection'
 require 'vagrant-ovirt4/util/machine_names'
 require 'vagrant/util/retryable'
 
@@ -6,6 +7,7 @@ module VagrantPlugins
   module OVirtProvider
     module Action
       class CreateVM
+        include Util::Connection
         include Util::MachineNames
         include Vagrant::Util::Retryable
 
@@ -193,7 +195,7 @@ module VagrantPlugins
           destroy_env[:config_validate] = false
           destroy_env[:force_confirm_destroy] = true
           env[:action_runner].run(Action.action_destroy, destroy_env)
-          env[:connection].close()
+          safe_close_connection_standard!(env)
         end
       end
     end
