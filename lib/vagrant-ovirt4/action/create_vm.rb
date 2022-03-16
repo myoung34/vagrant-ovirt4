@@ -1,10 +1,12 @@
 require 'log4r'
+require 'vagrant-ovirt4/util/machine_names'
 require 'vagrant/util/retryable'
 
 module VagrantPlugins
   module OVirtProvider
     module Action
       class CreateVM
+        include Util::MachineNames
         include Vagrant::Util::Retryable
 
         def initialize(app, env)
@@ -16,12 +18,11 @@ module VagrantPlugins
           # Get config.
           config = env[:machine].provider_config
 
-          hostname = env[:machine].config.vm.hostname
-          hostname = 'vagrant' if hostname.nil?
+          vmname = machine_vmname(env[:machine])
 
           # Output the settings we're going to use to the user
           env[:ui].info(I18n.t("vagrant_ovirt4.creating_vm"))
-          env[:ui].info(" -- Name:          #{hostname}")
+          env[:ui].info(" -- Name:          #{vmname}")
           env[:ui].info(" -- Cluster:       #{config.cluster}")
           env[:ui].info(" -- Template:      #{config.template}")
           env[:ui].info(" -- Console Type:  #{config.console}")
@@ -46,7 +47,7 @@ module VagrantPlugins
 
           # Create oVirt VM.
           attr = {
-              :name     => hostname,
+              :name     => vmname,
               :description => config.description,
               :comment => config.comment,
               :cpu      => {
@@ -127,7 +128,7 @@ module VagrantPlugins
               OvirtSDK4::DiskAttachment.new(
                 disk: {
                   name: disk[:name],
-                  description: '#{hostname} storage disk',
+                  description: "#{vmname} storage disk",
                   format: disk[:type] == 'qcow2' ? OvirtSDK4::DiskFormat::COW : OvirtSDK4::DiskFormat::RAW,
                   provisioned_size: disk[:size],
                   storage_domains: [{
