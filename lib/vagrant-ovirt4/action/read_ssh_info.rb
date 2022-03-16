@@ -17,31 +17,31 @@ module VagrantPlugins
           @app.call(env)
         end
 
+        # This method powers OVirtProvider::Provider#ssh_info.  It returns a
+        # hash of SSH connection information if and only if at least one IPv4
+        # address associated with the machine in question could be retrieved
+        # from the oVirt API.  Otherwise, it returns nil.
         def read_ssh_info(env)
           vms_service, machine = env[:vms_service], env[:machine]
-          return :not_created if machine.id.nil?
+          return nil if machine.id.nil?
 
           # Find the machine
           server = vms_service.vm_service(machine.id)
           begin
             if server.get.nil?
               machine.id = nil
-              return :not_created
+              return nil
             end
           rescue Exception => e
             machine.id = nil
-            return :not_created
-            raise e
+            return nil
           end
 
           nics_service = server.nics_service
           nics = nics_service.list
-          begin
-            ip_addr = nics.collect { |nic_attachment| env[:connection].follow_link(nic_attachment.reported_devices).collect { |dev| dev.ips.collect { |ip| ip.address if ip.version == 'v4' } unless dev.ips.nil? } }.flatten.reject { |ip| ip.nil? }.first
-          rescue
-            # for backwards compatibility with ovirt 4.3
-            ip_addr = nics.collect { |nic_attachment| env[:connection].follow_link(nic_attachment).reported_devices.collect { |dev| dev.ips.collect { |ip| ip.address if ip.version == 'v4' } unless dev.ips.nil? } }.flatten.reject { |ip| ip.nil? }.first rescue nil
-          end
+          ip_addr = first_active_ipv4_address(env, nics)
+
+          return nil if ip_addr.nil?
 
           # Return the info
           # TODO: Some info should be configurable in Vagrantfile
@@ -54,7 +54,16 @@ module VagrantPlugins
             :forward_x11      => machine.config.ssh.forward_x11,
           }
 
-        end 
+        end
+
+      private
+
+        def first_active_ipv4_address(env, nics)
+          nics.collect { |nic_attachment| env[:connection].follow_link(nic_attachment.reported_devices).collect { |dev| dev.ips.collect { |ip| ip.address if ip.version == 'v4' } unless dev.ips.nil? } }.flatten.reject { |ip| ip.nil? }.first
+        rescue
+          # for backwards compatibility with ovirt 4.3
+          nics.collect { |nic_attachment| env[:connection].follow_link(nic_attachment).reported_devices.collect { |dev| dev.ips.collect { |ip| ip.address if ip.version == 'v4' } unless dev.ips.nil? } }.flatten.reject { |ip| ip.nil? }.first rescue nil
+        end
       end
     end
   end
