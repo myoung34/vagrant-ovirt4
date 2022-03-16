@@ -78,6 +78,7 @@ Vagrant.configure("2") do |config|
     ovirt.debug = true
     ovirt.filtered_api = true #see http://www.ovirt.org/develop/release-management/features/infra/user-portal-permissions/
     ovirt.cluster = 'Default'
+    ovirt.vmname = 'my-vm'
     ovirt.template = 'Vagrant-Centos7-test'
     ovirt.console = 'vnc'
     ovirt.disk_size = '15 GiB' # only growing is supported. works the same way as below memory settings
@@ -105,8 +106,8 @@ end
 ### Configuration options
 
 1. Vagrant specific
-  1. `config.vm.hostname` => Sets the hostname of the VM
-    a. Is the 'name' in the Virtual Machine tab of the UI
+  1. `config.vm.hostname` => Sets the hostname of the VM. Optional. String.
+     Default is `"vagrant"`.
     a. Is the 'hostname' of the VM configured by `cloud-init`
   1. `config.vm.network` => Sets the network information of the VM.
     a. Note: `:ip` => is ignored, but `:ovirt__ip` is used and merged with `:ip`
@@ -119,6 +120,9 @@ end
   1. `password` => The password for the API. Required. String. No default value.
   1. `insecure` => Allow connecting to SSL sites without certificates. Optional. Bool. Default is `false`
   1. `debug` => Turn on additional log statements. Optional. Bool. Default is `false`.
+  1. `vmname` => Sets the name of the VM. Optional. String. Default is
+     `config.vm.hostname`, if defined, otherwise `"vagrant"`.
+    a. Is the 'name' in the Virtual Machine tab of the UI
   1. `template` => The name of the template to use for creation. Required. String. No Default value.
   1. `cluster` => The name of the ovirt cluster to create within. Required. String. No Default value.
   1. `console` => The type of remote viewing protocol to use. Required. String. No Default value.

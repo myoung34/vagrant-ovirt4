@@ -1,4 +1,6 @@
 require 'log4r'
+require 'vagrant-ovirt4/errors'
+require 'vagrant-ovirt4/util/machine_names'
 require 'vagrant/util/scoped_hash_override'
 
 module VagrantPlugins
@@ -7,6 +9,7 @@ module VagrantPlugins
 
       # Just start the VM.
       class StartVM
+        include Util::MachineNames
         include Vagrant::Util::ScopedHashOverride
 
         def initialize(app, env)
@@ -26,8 +29,7 @@ module VagrantPlugins
           end
 
           # FIX MULTIPLE NETWORK INTERFACES
-          hostname = env[:machine].config.vm.hostname
-          hostname = 'vagrant' if hostname.nil?
+          hostname = machine_hostname(env[:machine])
 
           initialization = {
             host_name: hostname,
