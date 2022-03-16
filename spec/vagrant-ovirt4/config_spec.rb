@@ -66,7 +66,9 @@ describe VagrantPlugins::OVirtProvider::Config do
 
   describe "overriding optimized_for" do
     [:optimized_for].each do |attribute|
-      ['server', 'desktop'].each do |value|
+      OvirtSDK4::VmType.constants.each do |const|
+        value = const.to_s.downcase
+
         it "should accept #{value} for #{attribute}" do
           instance.send("#{attribute}=".to_sym, value)
           instance.finalize!
@@ -103,27 +105,24 @@ describe VagrantPlugins::OVirtProvider::Config do
 
   describe "overriding affinity defaults" do
     [:affinity].each do |attribute|
+      OvirtSDK4::VmAffinity.constants.each do |const|
+        value = const.to_s.downcase
 
-      context 'valid value' do
-        it "should not default #{attribute} if overridden" do
-          instance.send("#{attribute}=".to_sym, "pinned")
+        it "should accept #{value} for #{attribute}" do
+          instance.send("#{attribute}=".to_sym, value)
           instance.finalize!
-          instance.send(attribute).should == "pinned"
+          instance.send(attribute).should == value
         end
       end
 
-      context 'invalid value' do
-        it "should error" do
-          expect {
-            instance.send("#{attribute}=".to_sym, "foo")
-            instance.finalize!
-          }.to raise_error(RuntimeError)
-
-        end
-
+      it "should reject a value for #{attribute} outside of the defined values" do
+        expect {
+          instance.send("#{attribute}=".to_sym, "foo")
+          instance.finalize!
+        }.to raise_error(RuntimeError)
       end
-
     end
+
   end
 
 end
