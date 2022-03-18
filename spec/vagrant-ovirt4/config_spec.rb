@@ -50,12 +50,16 @@ describe VagrantPlugins::OVirtProvider::Config do
     its("optimized_for")     { should be_nil }
     its("description")       { should == '' }
     its("comment")           { should == '' }
+    its("vmname")            { should be_nil }
+    its("timeout")           { should be_nil }
+    its("connect_timeout")   { should be_nil }
     its("run_once")          { should be false }
+    its("disks")             { should be_empty }
 
   end
 
   describe "overriding defaults" do
-    [:url, :username, :password, :insecure, :debug, :filtered_api, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :cloud_init, :placement_host, :bios_serial, :description, :comment].each do |attribute|
+    [:url, :username, :password, :insecure, :debug, :filtered_api, :cpu_cores, :cpu_sockets, :cpu_threads, :cluster, :console, :template, :cloud_init, :placement_host, :bios_serial, :description, :comment, :vmname].each do |attribute|
 
       it "should not default #{attribute} if overridden" do
         instance.send("#{attribute}=".to_sym, "foo")
@@ -126,6 +130,26 @@ describe VagrantPlugins::OVirtProvider::Config do
 
   end
 
+  describe "overriding disk size defaults" do
+    ['10 GiB', '999 M', '101010101 KB'].each do |value|
+      it "should accept #{value.inspect} for disk size" do
+        instance.send("disk_size=".to_sym, value)
+        expect { instance.finalize! }.not_to raise_error
+      end
+    end
+
+    [-1, '10 Umm', Object.new].each do |value|
+      it "should reject #{value.inspect} for disk size" do
+        instance.send("disk_size=".to_sym, value)
+        expect { instance.finalize! }.to raise_error do |error|
+          expect(error).to be_a(RuntimeError)
+          expect(error.message).to match(/^Not able to parse '[^']+'\. Please verify and check again\.$/)
+        end
+      end
+    end
+
+  end
+
   describe "overriding timeout defaults" do
     [:timeout, :connect_timeout].each do |attribute|
       [0, 6, 1_000_000, 8.10, nil].each do |value|
@@ -151,6 +175,52 @@ describe VagrantPlugins::OVirtProvider::Config do
             expect(error.message).to match(/nonnegative integer/)
           }
         end
+      end
+    end
+
+  end
+
+  describe "adding storage" do
+    let(:storage)        { :file }
+    let(:storage_size)   { '8 GiB' }
+    let(:storage_type)   { 'qcow2' }
+    let(:storage_domain) { 'mystoragedomain' }
+
+    def configure_storage!
+      instance.storage(storage, size: storage_size, type: storage_type, storage_domain: storage_domain)
+    end
+
+    before do
+      expect(instance.disks).to be_empty
+    end
+
+    it "handles storage specifications" do
+      configure_storage!
+      instance.finalize!
+      expect(instance.disks).not_to be_empty
+      expect(instance.disks).to include(hash_including(
+        name: 'storage_disk_1',
+        type: storage_type,
+        bus: 'virtio',
+        storage_domain: storage_domain,
+      ))
+    end
+
+    context "given a type other than #{:file.inspect}" do
+      let(:storage) { :foobar }
+
+      it "ignores the storage specification" do
+        configure_storage!
+        instance.finalize!
+        expect(instance.disks).to be_empty
+      end
+    end
+
+    context "given an invalid storage size" do
+      let(:storage_size) { 'Nope' }
+
+      it "raises an exception" do
+        expect { configure_storage! }.to raise_error(ArgumentError)
       end
     end
 
