@@ -11,10 +11,52 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = [:should, :expect]
   end
+
+  # When this setting is enabled, check that we saw calls to all available
+  # provider config readers and writers.
+  config.add_setting :check_provider_config_attr_accessor_calls
+  config.check_provider_config_attr_accessor_calls ||= ENV.key?('CI')
 end
 
 describe VagrantPlugins::OVirtProvider::Config do
   let(:instance) { described_class.new }
+
+  if RSpec.configuration.check_provider_config_attr_accessor_calls
+    before :all do
+      @writers ||=  described_class.instance_methods.grep(/\w\=$/).sort - Vagrant.plugin('2', :config).instance_methods
+      @readers ||= @writers.map { |w| w.to_s.sub(/\=$/, '').to_sym }
+
+      @writer_calls ||= Hash.new { |h, w| h[w] = 0 }
+      @reader_calls ||= Hash.new { |h, r| h[r] = 0 }
+    end
+
+    before :each do
+      @writers.each do |writer|
+        ivar = :"@#{writer.to_s.sub(/\=$/, '')}"
+        allow(instance).to receive(writer) do |arg|
+          instance.instance_variable_set(ivar, arg)
+          @writer_calls[writer] += 1
+          arg
+        end
+      end
+
+      @readers.each do |reader|
+        ivar = :"@#{reader}"
+
+        allow(instance).to receive(reader) do
+          @reader_calls[reader] += 1
+          instance.instance_variable_get(ivar)
+        end
+      end
+    end
+
+    after :all do
+      missing_writers = @writers.select { |w| @writer_calls[w].zero? }
+      missing_readers = @readers.select { |w| @reader_calls[w].zero? }
+      all = missing_readers + missing_writers
+      fail "saw no tests of the following config methods: #{all.map(&:inspect).join(", ")}" unless all.empty?
+    end
+  end
 
   # Ensure tests are not affected by AWS credential environment variables
   before :each do
@@ -53,8 +95,8 @@ describe VagrantPlugins::OVirtProvider::Config do
     its("vmname")            { should be_nil }
     its("timeout")           { should be_nil }
     its("connect_timeout")   { should be_nil }
-    its("run_once")          { should be false }
     its("disks")             { should be_empty }
+    its("run_once")          { should be false }
 
   end
 
