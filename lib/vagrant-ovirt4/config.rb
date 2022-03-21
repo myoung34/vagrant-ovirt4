@@ -33,6 +33,7 @@ module VagrantPlugins
       attr_accessor :disks
       attr_accessor :timeout
       attr_accessor :connect_timeout
+      attr_accessor :run_once
 
       def initialize
         @url               = UNSET_VALUE
@@ -61,6 +62,7 @@ module VagrantPlugins
         @vmname            = UNSET_VALUE
         @timeout           = UNSET_VALUE
         @connect_timeout   = UNSET_VALUE
+        @run_once          = UNSET_VALUE
         @disks             = []
 
       end
@@ -118,6 +120,7 @@ module VagrantPlugins
         @vmname = nil if @vmname == UNSET_VALUE
         @timeout = nil if @timeout == UNSET_VALUE
         @connect_timeout = nil if @connect_timeout == UNSET_VALUE
+        @run_once = @run_once == UNSET_VALUE ? false : !!@run_once
 
         unless optimized_for.nil?
           raise "Invalid 'optimized_for'. Must be one of #{OvirtSDK4::VmType.constants.map { |s| "'#{s.downcase}'" }.join(' ')}" unless OvirtSDK4::VmType.constants.include? optimized_for.upcase.to_sym

@@ -83,6 +83,7 @@ Vagrant.configure("2") do |config|
     ovirt.filtered_api = true #see http://www.ovirt.org/develop/release-management/features/infra/user-portal-permissions/
     ovirt.cluster = 'Default'
     ovirt.vmname = 'my-vm'
+    ovirt.run_once = false
     ovirt.template = 'Vagrant-Centos7-test'
     ovirt.console = 'vnc'
     ovirt.disk_size = '15 GiB' # only growing is supported. works the same way as below memory settings
@@ -138,6 +139,7 @@ end
   1. `vmname` => Sets the name of the VM. Optional. String. Default is
      `config.vm.hostname`, if defined, otherwise `"vagrant"`.
     a. Is the 'name' in the Virtual Machine tab of the UI
+  1. `run_once` => Launch VM in run-once mode. Optional. Default is `false`.
   1. `template` => The name of the template to use for creation. Required. String. No Default value.
   1. `cluster` => The name of the ovirt cluster to create within. Required. String. No Default value.
   1. `console` => The type of remote viewing protocol to use. Required. String. No Default value.

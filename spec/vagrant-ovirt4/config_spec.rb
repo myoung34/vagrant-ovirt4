@@ -50,6 +50,7 @@ describe VagrantPlugins::OVirtProvider::Config do
     its("optimized_for")     { should be_nil }
     its("description")       { should == '' }
     its("comment")           { should == '' }
+    its("run_once")          { should be false }
 
   end
 
@@ -149,6 +150,29 @@ describe VagrantPlugins::OVirtProvider::Config do
             expect(error).to be_a(RuntimeError)
             expect(error.message).to match(/nonnegative integer/)
           }
+        end
+      end
+    end
+
+  end
+
+  describe "overriding run_once defaults" do
+    context "given truthy values" do
+      [Object.new, {}, true, 1, 0].each do |value|
+        it "should convert #{value.inspect} to 'true'" do
+          instance.run_once = value
+          instance.finalize!
+          expect(instance.run_once).to be true
+        end
+      end
+    end
+
+    context "given falsey values" do
+      [false, nil].each do |value|
+        it "should convert #{value.inspect} to 'false'" do
+          instance.run_once = value
+          instance.finalize!
+          expect(instance.run_once).to be false
         end
       end
     end
