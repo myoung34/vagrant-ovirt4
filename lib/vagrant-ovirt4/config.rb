@@ -5,6 +5,7 @@ require 'ovirtsdk4'
 module VagrantPlugins
   module OVirtProvider
     class Config < Vagrant.plugin('2', :config)
+      attr_reader :disks
 
       attr_accessor :url
       attr_accessor :username
@@ -30,7 +31,6 @@ module VagrantPlugins
       attr_accessor :description
       attr_accessor :comment
       attr_accessor :vmname
-      attr_accessor :disks
       attr_accessor :timeout
       attr_accessor :connect_timeout
       attr_accessor :run_once
