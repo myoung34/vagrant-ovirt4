@@ -1,3 +1,6 @@
+v2.1.2
+79a0074 Fix lock file
+
 v2.1.1
 605663e Bump nokogiri from 1.13.3 to 1.13.4
 2981f5c Default to disabling run-once mode
