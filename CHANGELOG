@@ -1,3 +1,7 @@
+v2.2.0
+ef555e3 Config spec: assert that we test all attributes
+6e47c1b Add tests for additional configuration params
+
 v2.1.2
 79a0074 Fix lock file
 
