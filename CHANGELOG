@@ -1,3 +1,19 @@
+v2.1.1
+605663e Bump nokogiri from 1.13.3 to 1.13.4
+2981f5c Default to disabling run-once mode
+f048313 Enable oVirt conn debugging when VAGRANT_LOG=info
+3555e36 Add safe connection closing methods
+cdb765c Support :timeout and :timeout_connect options
+tomeon/test-all-vmtype-andvmaffinity-values
+2a9a653 Rakefile: add RSpec task
+7641780 test all valid VmType and VmAffinity values
+54efcde Add tests for vmname and hostname settings
+dc3ab3e Add "vmname" provider option
+233e4bb read_ssh_info: return nil on IPv4 lookup failure
+fcff147 Bump nokogiri from 1.12.5 to 1.13.3
+da44f24 Bump nokogiri from 1.11.4 to 1.12.5
+9025f4e Bump nokogiri from 1.11.3 to 1.11.4
+
 v2.1.0
 41b8c63 Move where rspec-mocks is included.
 0015c45 Update engine binding.
