@@ -28,7 +28,7 @@ GIT
 PATH
   remote: .
   specs:
-    vagrant-ovirt4 (2.1.1)
+    vagrant-ovirt4 (2.1.2)
       filesize (~> 0)
       nokogiri (~> 1)
       ovirt-engine-sdk (~> 4)
