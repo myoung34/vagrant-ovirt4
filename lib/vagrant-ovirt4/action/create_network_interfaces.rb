@@ -37,7 +37,7 @@ module VagrantPlugins
 
             iface_options = scoped_hash_override(options, :ovirt)
             @logger.info("Interface options: #{iface_options}")
-
+            #env[:ui].info("Interface options:  #{iface_options}")
             begin
               nics_service = env[:vms_service].vm_service(env[:machine].id).nics_service
               if iface_options.nil?
@@ -60,16 +60,34 @@ module VagrantPlugins
                 raise Errors::NetworkNotFoundError, :network_name => iface_options[:network_name] if network_profile_id.nil? and !iface_options[:network_name].nil?
 
                 # quick and dirty way to look for a 'nic#' that is not already attached to the machine
-                iface = (("nic1".."nic8").flat_map { |x| x } - env[:vms_service].vm_service(env[:machine].id).nics_service.list.map(&:name)).first rescue "vagrant_nic1"
+                if iface_options[:ovirt__interface_name].nil?
+                  iface = (("nic1".."nic8").flat_map { |x| x } - env[:vms_service].vm_service(env[:machine].id).nics_service.list.map(&:name)).first rescue "vagrant_nic1"
+                else
+                  iface = iface_options[:ovirt__interface_name]
+                end
                 @logger.info("Creating network interface #{iface}")
-                nics_service.add(
-                  OvirtSDK4::Nic.new(
-                    name: iface,
-                    vnic_profile: {
-                      id: network_profile_id
-                    }
+                if !iface_options[:ovirt__mac].nil?
+                  interface_address = iface_options[:ovirt__mac].scan(/.{2}|.+/).join(":").downcase
+                  mac_address = OvirtSDK4::Mac.new( address: interface_address )
+                  nics_service.add(
+                    OvirtSDK4::Nic.new(
+                      name: iface,
+                      vnic_profile: {
+                        id: network_profile_id
+                      },
+                      mac: mac_address
+                    )
                   )
-                )
+                else
+                  nics_service.add(
+                    OvirtSDK4::Nic.new(
+                      name: iface,
+                      vnic_profile: {
+                        id: network_profile_id
+                      }
+                    )
+                  )
+                end
               end
             rescue => e
               if config.debug
@@ -91,4 +109,3 @@ module VagrantPlugins
     end
   end
 end
-
