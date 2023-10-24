@@ -64,7 +64,7 @@ Vagrant.configure("2") do |config|
   config.vm.network :private_network,
     :ovirt__network_name => 'ovirtmgmt' #DHCP
     # Static configuration
-    #:ovirt__ip => '192.168.2.198', :ovirt__network_name => 'ovirtmgmt', :ovirt__gateway => '192.168.2.125', :ovirt__netmask => '255.255.0.0', :ovirt__dns_servers => '192.168.2.1', :ovirt__dns_search => 'test.local'
+    #:ovirt__ip => '192.168.2.198', :ovirt__network_name => 'ovirtmgmt', :ovirt__gateway => '192.168.2.125', :ovirt__netmask => '255.255.0.0', :ovirt__dns_servers => '192.168.2.1', :ovirt__dns_search => 'test.local', :ovirt__mac => "0200004F49AB"
     # Static configuration with biosdevname. Guest OS assigns interface names (ens3, em1 or something else). ovirt__interface_name has to match that name.
     #:ovirt__ip => '192.168.2.198', :ovirt__network_name => 'ovirtmgmt', :ovirt__gateway => '192.168.2.125', :ovirt__netmask => '255.255.0.0', :ovirt__dns_servers => '192.168.2.1', :ovirt__dns_search => 'test.local', :ovirt__interface_name => 'ens3'
 
